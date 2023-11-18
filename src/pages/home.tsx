@@ -28,7 +28,7 @@ export default function Home() {
     },
   })
 
-  const { isLoading: loadingRecruiters } = useQuery({
+  const { isLoading: isLoadingRecruiters } = useQuery({
     queryKey: ['outstanding-recruiters'],
     queryFn: recruitersApi.getOutstandingRecruiters,
     onSuccess: (repsonse) => {
@@ -56,9 +56,11 @@ export default function Home() {
               Xem tất cả
             </Link>
           </div>
-          {!recruiters.length && <p className='text-center text-base'>Hiện tại chưa có nhà tuyển dụng nào phù hợp</p>}
+          {!isLoadingRecruiters && !recruiters.length && (
+            <p className='text-center text-base'>Hiện tại chưa có nhà tuyển dụng nào phù hợp</p>
+          )}
           <div className='grid grid-cols-1 gap-6 py-6 md:grid-cols-3'>
-            {loadingRecruiters && (
+            {isLoadingRecruiters && (
               <div className='col-span-3 text-center'>
                 <span className='loading'></span>
               </div>
@@ -80,7 +82,9 @@ export default function Home() {
               Xem tất cả
             </Link>
           </div>
-          {!jobs.length && <p className='text-center text-base'>Hiện tại chưa có việc làm nào phù hợp</p>}
+          {!isLoadingJobs && !jobs.length && (
+            <p className='text-center text-base'>Hiện tại chưa có việc làm nào phù hợp</p>
+          )}
           <div className='grid grid-cols-1 gap-6 py-6 md:grid-cols-3'>
             {isLoadingJobs && (
               <div className='col-span-3 text-center'>

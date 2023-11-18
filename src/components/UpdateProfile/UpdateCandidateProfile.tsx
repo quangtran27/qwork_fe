@@ -112,10 +112,7 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
                         checked={option.value === field.value}
                         value={option.value}
                       />
-                      <label
-                        htmlFor={`role-${option.value}`}
-                        className='ml-2 font-medium text-gray-900 dark:text-gray-300'
-                      >
+                      <label htmlFor={`role-${option.value}`} className='ml-2 text-gray-900'>
                         {option.label}
                       </label>
                     </div>

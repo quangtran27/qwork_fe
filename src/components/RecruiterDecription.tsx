@@ -8,11 +8,11 @@ export default function RecruiterDescription({ address, description, phone }: Pr
 
   return (
     <div className='flex flex-col gap-6 lg:col-span-3'>
-      <div className='rounded-3xl bg-white p-4 shadow'>
+      <div className='rounded-2xl border bg-white p-4 shadow-sm'>
         <h3 className='text-h3 text-center lg:text-left'>Giới thiệu công ty</h3>
         <p className={!showDescription ? 'line-clamp-5 overflow-hidden text-ellipsis' : ''}>{description}</p>
         <p
-          className='py-1 text-center text-primary'
+          className='cursor-pointer py-1 text-center text-primary'
           onClick={() => {
             setShowDescription((prev) => !prev)
           }}
@@ -20,7 +20,7 @@ export default function RecruiterDescription({ address, description, phone }: Pr
           {showDescription ? 'Ẩn bớt' : '...Xem thêm'}
         </p>
       </div>
-      <div className='flex flex-col gap-4 rounded-3xl bg-white p-4 shadow'>
+      <div className='flex flex-col gap-4 rounded-2xl border bg-white p-4 shadow-sm'>
         <h3 className='text-h3 text-center lg:text-left'>Thông tin liên hệ</h3>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>

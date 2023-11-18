@@ -6,8 +6,8 @@ export default function Introduce() {
   const profile = useAppSelector(selectProfile)
   return (
     <div className='grid w-full grid-cols-1 gap-4 px-4 py-6 lg:grid-cols-2 lg:gap-6 lg:px-0'>
-      <div className='rounded-3xl bg-white p-4 shadow'>
-        <h3 className='text-h3 text-center lg:text-left'>Giới thiệu</h3>
+      <div className='rounded-2xl border bg-white p-4 shadow-sm'>
+        <h3 className='text-h3 mb-2 text-center lg:text-left'>Giới thiệu</h3>
         <p className='text-center text-lg lg:text-left lg:text-base'>{profile.description}</p>
       </div>
       <CandidateDescription />

@@ -9,7 +9,7 @@ export default function CandidateDescription() {
   const birthDay = dateTimeConverter.dateStringToDate(profile.birthDay || '2000-01-01').join('-')
   return (
     <div className='flex flex-col gap-6'>
-      <div className='flex flex-col gap-4 rounded-3xl bg-white p-4 text-lg shadow lg:text-base'>
+      <div className='shadow:sm flex flex-col gap-4 rounded-2xl border bg-white p-4 text-lg lg:text-base'>
         <h3 className='text-h3'>Thông tin liên hệ</h3>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>

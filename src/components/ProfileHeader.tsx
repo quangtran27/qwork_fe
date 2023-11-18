@@ -44,7 +44,7 @@ export default function ProfileHeader() {
           </div>
         )}
       </div>
-      <div className='bg-white shadow'>
+      <div className='bg-white'>
         <Container>
           <div className='relative -mb-20 flex w-full -translate-y-24 flex-col items-center gap-4 lg:-mb-0 lg:h-36 lg:-translate-y-0 lg:flex-row lg:gap-8'>
             <Link

@@ -9,9 +9,9 @@ export default function RecruiterProfile() {
   const [activedTab, setActivedTab] = useState(0)
 
   return (
-    <div className='min-h-screen'>
+    <div>
       <ProfileHeader />
-      <div className='bg-white'>
+      <div className='border-b bg-white shadow-sm'>
         <Container center={false}>
           <div className='flex items-start justify-center gap-2 border-t lg:justify-start'>
             {recruiterProfileTabs.map((tab, index) => (
