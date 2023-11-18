@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #1d4ed8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  font-family: 'Open Sans', sans-serif;
+  text-rendering: optimizeSpeed;
+}
+
+.link-underline {
+  padding: 8px 0px;
+  border-bottom-width: 0;
+  background-image: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+  background-size: 0 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease-in-out;
+}
+
+.link-underline.active {
+  font-weight: 800;
+}
+
+.link-underline.active,
+.link-underline:hover {
+  background-image: linear-gradient(transparent, transparent),
+    linear-gradient(var(--primary-color), var(--primary-color));
+  color: var(--primary-color);
+  background-size: 100% 2px;
+}
+
+.text-h1 {
+  @apply text-3xl font-semibold uppercase leading-10;
+}
+
+.text-h2 {
+  @apply text-2xl font-semibold;
+}
+
+.text-h3 {
+  @apply text-xl font-semibold;
+}
