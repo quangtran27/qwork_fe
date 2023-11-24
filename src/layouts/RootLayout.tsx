@@ -10,7 +10,7 @@ export default function RootLayout() {
   return (
     <div className='flex min-h-screen flex-col'>
       {!isAuthPage && <Header />}
-      <main className='flex flex-1 flex-col gap-8 bg-gradient-to-b from-black/5 to-gray-50 text-gray-800'>
+      <main className='flex flex-1 flex-col bg-gradient-to-b from-black/5 to-gray-50 text-gray-800'>
         <Outlet />
       </main>
       {!isAuthPage && <Footer />}

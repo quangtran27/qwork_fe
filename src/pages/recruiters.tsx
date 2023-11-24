@@ -6,6 +6,8 @@ import SearchBox from '@/components/SearchBox'
 import routes from '@/configs/route.config'
 import { emptyPagination } from '@/constants/commons.constant'
 import { Profile } from '@/types/profile.type'
+import { faBuilding } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useSearchParams } from 'react-router-dom'
@@ -44,17 +46,20 @@ export default function Recruiters() {
       />
 
       <Container>
-        <div className='px-4 lg:px-0'>
-          <div className='my-4 flex items-center justify-between'>
-            <div className='flex items-center gap-3 text-2xl'>
-              <h2 className='font-bold'>Danh sách nhà tuyển dụng</h2>
+        <div className='w-full'>
+          <div className='mt-8 px-4 lg:px-0'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-3'>
+                <FontAwesomeIcon icon={faBuilding} className='text-xl text-primary' />
+                <h3 className='text-h3'>Tất cả nhà tuyển dụng</h3>
+              </div>
             </div>
-          </div>
-          {!recruiters.length && <p className='text-center text-base'>Hiện tại chưa có nhà tuyển dụng nào phù hợp</p>}
-          <div className='grid grid-cols-1 gap-6 py-6 lg:grid-cols-3'>
-            {recruiters.map((recruiter) => (
-              <Recruiter key={recruiter.id} {...recruiter} />
-            ))}
+            {!recruiters.length && <p className='text-center text-base'>Hiện tại chưa có nhà tuyển dụng nào phù hợp</p>}
+            <div className='grid grid-cols-1 gap-6 py-6 lg:grid-cols-3'>
+              {recruiters.map((recruiter) => (
+                <Recruiter key={recruiter.id} {...recruiter} />
+              ))}
+            </div>
           </div>
         </div>
       </Container>

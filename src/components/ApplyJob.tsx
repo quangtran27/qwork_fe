@@ -63,7 +63,7 @@ const ApplyJob = forwardRef<HTMLDialogElement, ApplyJobProps>(({ id, name }, ref
         <form className='mt-4 flex flex-col gap-4' onSubmit={handleApplyJob}>
           <input type='hidden' {...register('jobId')} />
           <div>
-            <label className='mb-1 block' htmlFor='job-name'>
+            <label className='mb-2 block' htmlFor='job-name'>
               Họ và tên <span className='text-error'>(*)</span>:
             </label>
             <TextInput
@@ -75,7 +75,7 @@ const ApplyJob = forwardRef<HTMLDialogElement, ApplyJobProps>(({ id, name }, ref
             />
           </div>
           <div>
-            <label className='mb-1 block' htmlFor='job-phone'>
+            <label className='mb-2 block' htmlFor='job-phone'>
               Số điện thoại <span className='text-error'>(*)</span>:
             </label>
             <TextInput
@@ -87,19 +87,19 @@ const ApplyJob = forwardRef<HTMLDialogElement, ApplyJobProps>(({ id, name }, ref
             />
           </div>
           <div>
-            <label className='mb-1 block' htmlFor='job-email'>
+            <label className='mb-2 block' htmlFor='job-email'>
               Email <span className='text-error'>(*)</span>:
             </label>
             <TextInput
               id='job-email'
-              placeholder='Nhập tên công việc'
+              placeholder='Nhập email'
               error={!!errors.email}
               errorMessage={errors.email?.message}
               {...register('email')}
             />
           </div>
           <div className='flex flex-wrap items-center gap-4'>
-            <label className='mb-1 block' htmlFor='job-email'>
+            <label className='mb-2 block' htmlFor='job-email'>
               CV <span className='text-error'>(*)</span>:
             </label>
             <input

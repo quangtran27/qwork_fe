@@ -1,19 +1,20 @@
 import { useAppSelector } from '@/hook/useAppSelector'
 import { selectAuth, selectProfile } from '@/redux/reducers/auth-slice'
 import { ProfileType, UpdateProfileAction } from '@/types/profile.type'
-import { faCamera, faKey, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCamera, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRef } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Button from './Button'
 import Container from './Container'
+import TooltipText from './TooltipText'
 import UpdateAvatar from './UpdateAvatar'
 import UpdateBackground from './UpdateBackground'
 import UpdatePassword from './UpdatePassword'
 import UpdateProfile from './UpdateProfile'
-import TooltipText from './TooltipText'
 
 export default function ProfileHeader() {
+  const navigate = useNavigate()
   const auth = useAppSelector(selectAuth)
   const profile = useAppSelector(selectProfile)
   const isLoggedUser = useAppSelector(selectAuth).id === profile.userId
@@ -22,6 +23,16 @@ export default function ProfileHeader() {
 
   const [searchParams] = useSearchParams()
   const action = searchParams.get('action') || ''
+
+  const handleUpdateBackground = () => {
+    searchParams.set('action', UpdateProfileAction.updateBackground)
+    navigate({ search: searchParams.toString() })
+  }
+
+  const changeUrlAction = (action: string) => {
+    searchParams.set('action', action)
+    navigate({ search: searchParams.toString() })
+  }
 
   return (
     <div className='mt-header'>
@@ -34,12 +45,15 @@ export default function ProfileHeader() {
         {profile.type === ProfileType.recruiter && auth.id === profile.userId && (
           <div className='absolute inset-0'>
             <div className='mx-auto flex h-full w-full max-w-screen-xl items-start justify-end lg:items-end'>
-              <Link to={`?action=${UpdateProfileAction.updateBackground}`}>
-                <Button className='mr-4 mt-4 bg-black/40 text-white lg:mb-6 lg:mt-0' color='default' variant='outline'>
-                  <FontAwesomeIcon className='text-lg' icon={faCamera} />
-                  Cập nhật ảnh bìa
-                </Button>
-              </Link>
+              <Button
+                className='mt-4 bg-black/40 text-white lg:mb-6 lg:mt-0'
+                color='default'
+                variant='outline'
+                onClick={handleUpdateBackground}
+              >
+                <FontAwesomeIcon className='text-lg' icon={faCamera} />
+                Cập nhật ảnh bìa
+              </Button>
             </div>
           </div>
         )}
@@ -82,18 +96,16 @@ export default function ProfileHeader() {
             </div>
             {isLoggedUser && (
               <div className='flex h-full flex-col items-center gap-2 bg-white lg:flex-row lg:gap-4'>
-                <Link className='w-full lg:w-[unset]' to={`?action=${UpdateProfileAction.updateProfile}`}>
-                  <Button variant='outline' className='w-full lg:w-[unset]'>
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                    Cập nhật thông tin
-                  </Button>
-                </Link>
-                <Link className='w-full lg:w-[unset]' to={`?action=${UpdateProfileAction.updatePassword}`}>
-                  <Button variant='outline' className='w-full lg:w-[unset]'>
-                    <FontAwesomeIcon icon={faKey} />
-                    Đổi mật khẩu
-                  </Button>
-                </Link>
+                <Button
+                  variant='outline'
+                  className='w-full lg:w-[unset]'
+                  onClick={() => {
+                    changeUrlAction(UpdateProfileAction.updateProfile)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                  Cập nhật hồ sơ
+                </Button>
               </div>
             )}
           </div>

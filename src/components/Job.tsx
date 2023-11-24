@@ -8,7 +8,7 @@ import { handleImageError } from '@/utils/handlers/error-image.handler'
 import { faLocation, faNewspaper, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Application from './Application'
 import Button from './Button'
 import TooltipText from './TooltipText'
@@ -39,21 +39,24 @@ export default function Job({
   onEdit,
   onDelete,
 }: JobProps) {
+  const navigate = useNavigate()
   const profile = useAppSelector(selectProfile)
   const auth = useAppSelector(selectAuth)
   const [dateDisplay, dateClass] = countExpired(expired)
   const [status] = useState(_status)
 
   return (
-    <Link
-      to={routes.jobDetail.replace(':id', id)}
-      className='flex cursor-pointer flex-col rounded-2xl border bg-white p-4 shadow-sm transition-all'
-    >
-      <div className='flex flex-1'>
+    <div className='flex cursor-pointer flex-col rounded-2xl border bg-white p-4 shadow-sm transition-all'>
+      <div
+        onClick={() => {
+          navigate(routes.jobDetail.replace(':id', id))
+        }}
+        className='flex flex-1'
+      >
         <figure className='relative h-14 w-14 overflow-hidden rounded-full border bg-white shadow-sm'>
           <img
             className='absolute h-full w-full object-contain'
-            src={recruiterAvatar}
+            src={profile.id === recruiterId ? profile.avatar : recruiterAvatar}
             alt={name}
             onError={handleImageError}
           />
@@ -70,9 +73,15 @@ export default function Job({
                 <span className='badge badge-ghost whitespace-nowrap'>Ngưng tuyển</span>
               ))}
           </div>
-          <Link to={routes.profile.replace(':id', recruiterId)} className='link-hover text-gray-600'>
+          <div
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(routes.profile.replace(':id', recruiterId))
+            }}
+            className='link-hover text-gray-600'
+          >
             <TooltipText content={recruiterName || ''} description={recruiterName || ''} ellipsis />
-          </Link>
+          </div>
           <span className='text-lg font-semibold text-secondary'>
             {minSalary === 0 || maxSalary === 0 ? 'Thoả thuận' : `${minSalary} - ${maxSalary} triệu`}
           </span>
@@ -116,6 +125,6 @@ export default function Job({
           )}
         </>
       )}
-    </Link>
+    </div>
   )
 }

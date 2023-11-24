@@ -1,6 +1,7 @@
 import jobsApi from '@/api/jobs.api'
 import ApplyJob from '@/components/ApplyJob'
 import Breadcrumbs, { BreadcrumbItem } from '@/components/Breadcrums'
+import Button from '@/components/Button'
 import Container from '@/components/Container'
 import Job from '@/components/Job'
 import JobDescription from '@/components/JobDescription'
@@ -11,6 +12,8 @@ import { useAppSelector } from '@/hook/useAppSelector'
 import { selectAuth } from '@/redux/reducers/auth-slice'
 import { ApiResponse } from '@/types/api.type'
 import { Job as IJob } from '@/types/jobs.type'
+import { faPenNib } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -77,7 +80,12 @@ export default function JobDetail() {
           <JobDescription {...job} />
           {/* <Hashtags tags={job.tags.split(',')} /> */}
         </div>
-        <div className='divider'></div>
+        <div className='divider my-8'>
+          <Button className='w-full lg:w-fit' variant='contain' color='primary' onClick={handleApplyJob}>
+            <FontAwesomeIcon icon={faPenNib} />
+            Ứng tuyển ngay
+          </Button>
+        </div>
         <div className='w-full'>
           <h3 className='text-h3'>Có thể bạn cũng quan tâm</h3>
           <div className='grid grid-cols-1 gap-4 py-4 lg:grid-cols-3'>
