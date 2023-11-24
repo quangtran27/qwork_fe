@@ -81,7 +81,6 @@ export default function Register() {
           </Link>
           <div className='mb-6'>
             <TextInput
-              className='mb-3'
               iconLeft={<FontAwesomeIcon icon={faUser} />}
               placeholder='Họ và tên'
               type='text'
@@ -90,7 +89,7 @@ export default function Register() {
               {...register('name')}
             />
             <TextInput
-              className='mb-3'
+              className='mt-3'
               iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
               placeholder='Nhập địa chỉ email'
               error={!!errors.email}
@@ -98,7 +97,7 @@ export default function Register() {
               {...register('email')}
             />
             <TextInput
-              className='mb-3'
+              className='mt-3'
               iconLeft={<FontAwesomeIcon icon={faPhone} />}
               placeholder='Nhập số điện thoại'
               error={!!errors.phone}
@@ -106,7 +105,7 @@ export default function Register() {
               {...register('phone')}
             />
             <TextInput
-              className='mb-3'
+              className='mt-3'
               iconLeft={<FontAwesomeIcon icon={faLock} />}
               placeholder='Nhập mật khẩu'
               type={showPassword ? 'text' : 'password'}
@@ -127,7 +126,7 @@ export default function Register() {
                   <div className='flex px-4'>
                     {roleOptions.map((option) => {
                       return (
-                        <div key={option.value} className='mr-4 flex items-center'>
+                        <div key={option.value} className='mr-4 mt-3 flex items-center'>
                           <input
                             id={`role-${option.value}`}
                             type='radio'

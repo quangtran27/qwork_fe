@@ -64,9 +64,8 @@ export default function DoneResetPassword() {
         </Link>
       </div>
       <p className='mb-2 mt-0'>Điền mật khẩu mới:</p>
-      <div className='my-2'>
+      <div className='mb-5 mt-2'>
         <TextInput
-          className='mb-3'
           placeholder='Nhập mật khẩu'
           type={showPassword ? 'text' : 'password'}
           iconLeft={<FontAwesomeIcon icon={faLock} />}

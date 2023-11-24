@@ -63,9 +63,8 @@ export default function CheckToken() {
       </div>
       <p className='mb-2 mt-0'>Nhập mã xác nhận đã được gửi đến trong email:</p>
       <input type='hidden' {...register('email')} />
-      <div className='my-2'>
+      <div className='mb-5 mt-2'>
         <TextInput
-          className='mb-3'
           iconLeft={<FontAwesomeIcon icon={faCode} />}
           placeholder='Nhập mã xác nhận'
           type='text'

@@ -52,10 +52,9 @@ export default function RequestToken() {
           </figure>
         </Link>
       </div>
-      <div className='my-2'>
+      <div className='mb-5 mt-2'>
         <p className='mb-2 mt-0'>Hãy nhập email tài khoản của bạn:</p>
         <TextInput
-          className='mb-3'
           iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
           placeholder='Nhập địa chỉ email'
           type='text'

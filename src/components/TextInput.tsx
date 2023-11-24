@@ -25,12 +25,14 @@ const TextInput = forwardRef<Ref, TextInputProps>(
     )
 
     return (
-      <div className={wrapperMergedClass}>
-        {iconLeft && <div className='absolute inset-y-0 left-0 flex items-center pl-4'>{iconLeft}</div>}
-        <input id={id} className={mergedClass} {...attributes} ref={ref} />
-        {iconRight && <div className='absolute inset-y-0 right-0 flex items-center pr-4'>{iconRight}</div>}
+      <>
+        <div className={wrapperMergedClass}>
+          {iconLeft && <div className='absolute inset-y-0 left-0 flex items-center pl-4'>{iconLeft}</div>}
+          <input id={id} className={mergedClass} {...attributes} ref={ref} />
+          {iconRight && <div className='absolute inset-y-0 right-0 flex items-center pr-4'>{iconRight}</div>}
+        </div>
         {error && <div className='px-4 py-1 text-error'>{errorMessage}</div>}
-      </div>
+      </>
     )
   },
 )

@@ -78,7 +78,6 @@ export default function Login() {
           </div>
           <div className='my-2'>
             <TextInput
-              className='mb-3'
               iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
               placeholder='Nhập địa chỉ email'
               type='text'
@@ -87,7 +86,7 @@ export default function Login() {
               {...register('email')}
             />
             <TextInput
-              className='mb-3'
+              className='mt-3'
               placeholder='Nhập mật khẩu'
               type={showPassword ? 'text' : 'password'}
               iconLeft={<FontAwesomeIcon icon={faLock} />}
@@ -108,7 +107,7 @@ export default function Login() {
                   <div className='flex px-4'>
                     {roleOptions.map((option) => {
                       return (
-                        <div key={option.value} className='mr-4 flex items-center'>
+                        <div key={option.value} className='mr-4 mt-3 flex items-center'>
                           <input
                             id={`role-${option.value}`}
                             type='radio'
