@@ -27,7 +27,17 @@ export default function RecruiterDescription({ address, description, phone }: Pr
             <FontAwesomeIcon icon={faLocationDot} />
             Địa chỉ công ty:
           </div>
-          <div> {address}</div>
+          <div>
+            {address.includes('\n') ? (
+              <ul>
+                {address.split('\n').map((line) => (
+                  <li className='mb-1'>{line}</li>
+                ))}
+              </ul>
+            ) : (
+              address
+            )}
+          </div>
         </div>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>

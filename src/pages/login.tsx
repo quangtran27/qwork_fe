@@ -49,7 +49,6 @@ export default function Login() {
     onSuccess: (response) => {
       if (response.success) {
         dispatch(setCredential(response.data))
-        console.log('next: ', next)
         navigate(next ?? routes.home)
       } else {
         toast.error(`Đăng nhập không thành công: ${response.message}`)

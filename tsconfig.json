@@ -25,6 +25,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../../../Study/HK7/CNPMM/project/qtechs-fe/src/store.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
