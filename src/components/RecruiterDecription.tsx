@@ -28,9 +28,9 @@ export default function RecruiterDescription({ address, description, phone }: Pr
             Địa chỉ công ty:
           </div>
           <div>
-            {address.includes('\n') ? (
+            {address.includes('\\n') ? (
               <ul>
-                {address.split('\n').map((line) => (
+                {address.split('\\n').map((line) => (
                   <li className='mb-1'>{line}</li>
                 ))}
               </ul>
