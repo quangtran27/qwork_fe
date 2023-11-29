@@ -1,10 +1,11 @@
 import userApi from '@/api/user.api'
 import Container from '@/components/Container'
+import { emptyProfile } from '@/constants/profile.constant'
 import { useAppDispatch } from '@/hook/useAppDispatch'
-import { useAppSelector } from '@/hook/useAppSelector'
-import { selectProfile } from '@/redux/reducers/auth-slice'
 import { setProfile } from '@/redux/reducers/profile-slice'
-import { useQuery } from 'react-query'
+import { emptyResponse } from '@/utils/sample/api.sample'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import CandidateProfile from './candidate-profile'
 import RecruiterProfile from './recruiter-profile'
@@ -12,13 +13,19 @@ import RecruiterProfile from './recruiter-profile'
 export default function Profile() {
   const { id } = useParams()
   const dispatch = useAppDispatch()
-  const profile = useAppSelector(selectProfile)
 
-  const { isLoading } = useQuery(['profile', id], () => userApi.getProfile(id || ''), {
-    onSuccess: (response) => {
-      dispatch(setProfile(response.data))
-    },
+  const {
+    data: { data: profile },
+    isLoading,
+  } = useQuery({
+    queryKey: ['profile', id],
+    queryFn: () => userApi.getProfile(id || ''),
+    initialData: emptyResponse(emptyProfile),
   })
+
+  useEffect(() => {
+    dispatch(setProfile(profile))
+  }, [profile, dispatch])
 
   return (
     <>

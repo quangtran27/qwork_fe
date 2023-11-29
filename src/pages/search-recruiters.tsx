@@ -3,26 +3,24 @@ import Container from '@/components/Container'
 import Pagination from '@/components/Pagination'
 import Recruiter from '@/components/Recruiter'
 import SearchBox from '@/components/SearchBox'
-import { emptyPagination } from '@/constants/commons.constant'
 import { Profile } from '@/types/profile.type'
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { emptyResponse } from '@/utils/sample/api.sample'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export default function SearchRecruiters() {
   const [searchParams] = useSearchParams()
-  const [recruiters, setRecruiters] = useState<Profile[]>([])
-  const [pagination, setPagingation] = useState(emptyPagination)
-
   const keyword = searchParams.get('keyword') || ''
   const page = searchParams.get('page') || '1'
 
-  const { refetch } = useQuery({
+  const {
+    data: { data, pagination },
+    refetch,
+  } = useQuery({
+    queryKey: ['recruiters', keyword, page],
     queryFn: () => recruitersApi.getAll({ keyword: keyword, page: page }),
-    onSuccess: (response) => {
-      setRecruiters(response.data)
-      setPagingation(response.pagination)
-    },
+    initialData: emptyResponse<Profile[]>([]),
   })
 
   useEffect(() => {
@@ -45,11 +43,11 @@ export default function SearchRecruiters() {
                 </h2>
               </div>
             </div>
-            {recruiters.length === 0 && (
+            {data.length === 0 && (
               <p className='text-center text-gray-500'>Không có nhà tuyển dụng phù hợp với yêu cầu của bạn!</p>
             )}
             <div className='grid w-full grid-cols-1 gap-6 py-6 lg:grid-cols-3'>
-              {recruiters.map((recruiter) => (
+              {data.map((recruiter) => (
                 <Recruiter key={recruiter.id} {...recruiter} />
               ))}
             </div>

@@ -4,19 +4,17 @@ import TextInput from '@/components/TextInput'
 import routes from '@/configs/route.config'
 import { roleOptions } from '@/constants/users.constant'
 import { useAppDispatch } from '@/hook/useAppDispatch'
-import { useAppSelector } from '@/hook/useAppSelector'
-import { selectAuth, setCredential } from '@/redux/reducers/auth-slice'
+import { setCredential } from '@/redux/reducers/auth-slice'
 import { ApiResponse } from '@/types/api.type'
-import { LoginUser } from '@/types/users.type'
-import { emptyLoginUser } from '@/utils/sample/users'
-import { loginUserSchema } from '@/utils/validators/user'
+import { UserRoles } from '@/types/users.type'
+import { LoginUserSchema, loginUserSchema } from '@/utils/validators/user'
 import { faChevronLeft, faEnvelope, faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -27,25 +25,19 @@ export default function Login() {
   const next = searchParams.get('next')
   const [showPassword, setShowPassword] = useState(false)
 
-  const token = useAppSelector(selectAuth).token
-
-  useEffect(() => {
-    if (token) navigate(next ?? routes.home)
-  }, [token, navigate, next])
-
   const {
     control,
     formState: { errors },
     handleSubmit,
     register,
-  } = useForm({
+    setValue,
+  } = useForm<LoginUserSchema>({
     mode: 'onSubmit',
-    defaultValues: emptyLoginUser,
     resolver: yupResolver(loginUserSchema),
   })
 
-  const mutation = useMutation({
-    mutationFn: (loginUser: LoginUser) => authApi.login(loginUser),
+  const loginMutation = useMutation({
+    mutationFn: (loginUser: LoginUserSchema) => authApi.login(loginUser),
     onSuccess: (response) => {
       if (response.success) {
         dispatch(setCredential(response.data))
@@ -59,8 +51,12 @@ export default function Login() {
     },
   })
 
+  useEffect(() => {
+    setValue('role', UserRoles.candidate)
+  }, [setValue])
+
   const handleLogin = handleSubmit((loginUser) => {
-    mutation.mutate(loginUser as LoginUser)
+    loginMutation.mutate(loginUser)
   })
 
   return (
@@ -79,7 +75,6 @@ export default function Login() {
             <TextInput
               iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
               placeholder='Nhập địa chỉ email'
-              type='text'
               error={!!errors.email}
               errorMessage={errors.email?.message}
               {...register('email')}
@@ -127,10 +122,12 @@ export default function Login() {
               )}
             />
           </div>
-          <Link className='mb-2 block py-2 text-right text-secondary' to={'/forgot-password'}>
-            Quên mật khẩu?
-          </Link>
-          <Button loading={mutation.isLoading} className='w-full'>
+          <div className='mb-2 block py-2 text-right'>
+            <Link to={'/forgot-password'} className='text-secondary'>
+              Quên mật khẩu
+            </Link>
+          </div>
+          <Button loading={loginMutation.isPending} className='w-full'>
             Đăng nhập
           </Button>
           <p className='text-center'>

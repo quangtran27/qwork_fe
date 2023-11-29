@@ -1,10 +1,9 @@
 import axios, { axiosAuth, axiosPrivate } from '@/api/axios-instance'
-import { LoginUser } from '@/types/users.type'
-import { CheckResetPasswordCodeSchema, SetNewPasswordSchema } from '@/utils/validators/user'
+import { CheckResetPasswordCodeSchema, LoginUserSchema, SetNewPasswordSchema } from '@/utils/validators/user'
 import { ApiResponse, LoginData } from '../types/api.type'
 
 const authApi = {
-  login: async (loginUser: LoginUser) =>
+  login: async (loginUser: LoginUserSchema) =>
     (await axios.post<ApiResponse<LoginData>>('auth/login', loginUser, { withCredentials: true })).data,
   logout: async () => (await axiosAuth.post<ApiResponse<undefined>>('auth/logout', { withCredentials: true })).data,
   refreshToken: async () =>

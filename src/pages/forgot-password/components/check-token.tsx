@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 

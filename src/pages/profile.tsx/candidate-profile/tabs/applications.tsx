@@ -3,14 +3,15 @@ import userApi from '@/api/user.api'
 import Application from '@/components/Application'
 import Job from '@/components/Job'
 import { useAppSelector } from '@/hook/useAppSelector'
-import { selectProfile } from '@/redux/reducers/auth-slice'
+import { selectAuth } from '@/redux/reducers/auth-slice'
 import { ApplicationDetail, ApplicationStatusEnum } from '@/types/applications.type'
 import { Job as IJob } from '@/types/jobs.type'
-import { ChangeEventHandler, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { emptyResponse } from '@/utils/sample/api.sample'
+import { useQuery } from '@tanstack/react-query'
+import { ChangeEventHandler, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-const applicationStatusChoices = [
+const statusOptions = [
   { label: 'Tất cả', value: 0 },
   { label: 'Đã gửi', value: ApplicationStatusEnum.Sent },
   { label: 'Nhà tuyển dụng đã xem', value: ApplicationStatusEnum.Is_Considering },
@@ -19,38 +20,32 @@ const applicationStatusChoices = [
 ]
 
 export default function Applications() {
-  const profile = useAppSelector(selectProfile)
-  const navigate = useNavigate()
+  const userId = useAppSelector(selectAuth).id
   const [searchParams] = useSearchParams()
-  const [applications, setApplications] = useState<ApplicationDetail[]>([])
-  const [jobs, setJobs] = useState<IJob[]>([])
+  const navigate = useNavigate()
+  const status = Number.parseInt(searchParams.get('status') || '0') || statusOptions[0].value
 
-  const selectedApplicationStatus =
-    Number.parseInt(searchParams.get('status') || '0') || applicationStatusChoices[0].value
-
-  const { isLoading } = useQuery({
-    queryKey: ['profile-applications', profile.userId],
-    queryFn: () => userApi.getApplications(profile.userId),
-    onSuccess: (response) => {
-      setApplications(response.data)
-    },
+  const {
+    data: { data: applications },
+    isLoading,
+  } = useQuery({
+    queryKey: ['user-applications', userId],
+    queryFn: () => userApi.getApplications(userId),
+    initialData: emptyResponse<ApplicationDetail[]>([]),
+    enabled: !!userId,
   })
 
-  useQuery({
-    queryKey: ['outstanding-jobs'],
+  const {
+    data: { data: jobs },
+  } = useQuery({
+    queryKey: ['jobs', 'outstanding'],
     queryFn: jobsApi.getOutstandingJobs,
-    onSuccess: (response) => {
-      setJobs(() =>
-        response.data.map((job) => {
-          return { aplications: [], ...job }
-        }),
-      )
-    },
+    initialData: emptyResponse<IJob[]>([]),
   })
 
   useEffect(() => {
-    applications.filter((application) => application.status === selectedApplicationStatus)
-  }, [applications, selectedApplicationStatus])
+    applications.filter((application) => application.status === status)
+  }, [applications, status])
 
   const handleChangeApplicatoinStatus: ChangeEventHandler<HTMLSelectElement> = (e) => {
     searchParams.set('status', e.target.value)
@@ -60,13 +55,9 @@ export default function Applications() {
   return (
     <div className='mt-6 w-full px-4 lg:px-0'>
       <div className='flex items-center justify-between'>
-        <h2 className='text-h3'>Công việc đã ứng tuyển</h2>
-        <select
-          className='select select-bordered rounded-full'
-          value={selectedApplicationStatus}
-          onChange={handleChangeApplicatoinStatus}
-        >
-          {applicationStatusChoices.map((choice) => (
+        <h2 className='text-h3'>Việc làm đã ứng tuyển</h2>
+        <select className='select select-bordered rounded-full' value={status} onChange={handleChangeApplicatoinStatus}>
+          {statusOptions.map((choice) => (
             <option key={choice.value} value={choice.value}>
               {choice.label}
             </option>
@@ -83,7 +74,7 @@ export default function Applications() {
         <h3 className='text-h3'>Có thể bạn cũng quan tâm</h3>
         <div className='grid grid-cols-1 gap-4 py-4 lg:grid-cols-3'>
           {jobs.map((job) => (
-            <Job key={job.id} {...job} />
+            <Job key={job.id} applications={[]} {...job} />
           ))}
         </div>
       </div>

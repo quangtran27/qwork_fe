@@ -8,9 +8,9 @@ import { RequestResetPasswordSchema, requestResetPasswordSchema } from '@/utils/
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -63,7 +63,7 @@ export default function RequestToken() {
           {...register('email')}
         />
       </div>
-      <Button loading={requestCodeMutation.isLoading} className='w-full'>
+      <Button loading={requestCodeMutation.isPending} className='w-full'>
         Gửi mã xác nhận
       </Button>
     </form>

@@ -2,7 +2,7 @@ import jobsApi from '@/api/jobs.api'
 import { ApiResponse } from '@/types/api.type'
 import { AxiosError } from 'axios'
 import { forwardRef } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import Button from './Button'
 
@@ -42,7 +42,7 @@ const DeleteJob = forwardRef<HTMLDialogElement, DeleteJobProps>(({ id, onSuccess
           </form>
           <Button
             color='error'
-            loading={useDeleteJob.isLoading}
+            loading={useDeleteJob.isPending}
             onClick={() => {
               useDeleteJob.mutate(id)
             }}

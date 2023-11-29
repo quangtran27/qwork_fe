@@ -7,22 +7,20 @@ import { Outlet } from 'react-router-dom'
 
 export default function PersistLogin() {
   const token = useAppSelector(selectAuth).token
-  const refresh = useRefreshToken()
   const [isLoading, setLoading] = useState(true)
+  const refresh = useRefreshToken()
 
   useEffect(() => {
     const verifyRefreshToken = async () => {
       try {
         await refresh()
-      } catch (err) {
-        console.error('Error persisting login: ' + err)
       } finally {
         setLoading(false)
       }
     }
 
-    !token ? verifyRefreshToken() : setLoading(false)
+    !isLoading && !token ? verifyRefreshToken() : setLoading(false)
   }, [isLoading, refresh, token])
 
-  return <>{isLoading ? <Loading /> : <Outlet />}</>
+  return isLoading ? <Loading /> : <Outlet />
 }

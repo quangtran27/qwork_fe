@@ -27,6 +27,7 @@ export const loginUserSchema = object({
       'Vui lòng chọn quyền người dùng',
     ),
 })
+export type LoginUserSchema = InferType<typeof loginUserSchema>
 
 export const updatePasswordSchema = object({
   oldPassword: string().required('Vui lòng điền mật khẩu cũ'),

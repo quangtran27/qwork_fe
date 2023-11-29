@@ -5,11 +5,11 @@ import { ApiResponse } from '@/types/api.type'
 import { UpdateJob } from '@/types/jobs.type'
 import { updateJobSchema } from '@/utils/validators/job.validator'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
 import { ChangeEventHandler, MouseEventHandler, forwardRef, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import Button from './Button'
 import TextEditor from './TextEditor'
@@ -158,7 +158,7 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
               {errors.cityCode?.message && <div className='text-error'>{errors.cityCode?.message}</div>}
               <TextEditor editorState={editorState} setEditorState={setEditorState} />
             </div>
-            <Button loading={useJob.isLoading} onClick={handlePostJob}>
+            <Button loading={useJob.isPending} onClick={handlePostJob}>
               {mode === 'create' ? 'Đăng tin' : 'Cập nhật'}
             </Button>
           </form>

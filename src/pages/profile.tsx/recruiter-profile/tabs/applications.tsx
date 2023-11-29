@@ -1,21 +1,20 @@
 import userApi from '@/api/user.api'
 import Application from '@/components/Application'
 import { useAppSelector } from '@/hook/useAppSelector'
-import { ApplicationDetail } from '@/types/applications.type'
 import { selectProfile } from '@/redux/reducers/auth-slice'
-import { useState } from 'react'
-import { useQuery } from 'react-query'
+import { ApplicationDetail } from '@/types/applications.type'
+import { emptyResponse } from '@/utils/sample/api.sample'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Applications() {
   const profile = useAppSelector(selectProfile)
-  const [applications, setApplications] = useState<ApplicationDetail[]>([])
 
-  useQuery({
+  const {
+    data: { data: applications },
+  } = useQuery({
     queryKey: ['profile-applications', profile.userId],
     queryFn: () => userApi.getApplications(profile.userId),
-    onSuccess: (response) => {
-      setApplications(response.data)
-    },
+    initialData: emptyResponse<ApplicationDetail[]>([]),
   })
 
   return (

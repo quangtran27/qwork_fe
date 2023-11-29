@@ -14,9 +14,3 @@ export type User = {
   password: string
   role: UserRoles
 }
-
-export type LoginUser = {
-  email: string
-  password: string
-  role: UserRoles
-}

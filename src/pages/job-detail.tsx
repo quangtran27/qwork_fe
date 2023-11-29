@@ -1,4 +1,5 @@
 import jobsApi from '@/api/jobs.api'
+import userApi from '@/api/user.api'
 import ApplyJob from '@/components/ApplyJob'
 import Breadcrumbs, { BreadcrumbItem } from '@/components/Breadcrums'
 import Button from '@/components/Button'
@@ -10,56 +11,79 @@ import routes from '@/configs/route.config'
 import { emptyJob } from '@/constants/jobs.constant'
 import { useAppSelector } from '@/hook/useAppSelector'
 import { selectAuth } from '@/redux/reducers/auth-slice'
-import { ApiResponse } from '@/types/api.type'
+import { ApplicationDetail } from '@/types/applications.type'
 import { Job as IJob } from '@/types/jobs.type'
-import { faPenNib } from '@fortawesome/free-solid-svg-icons'
+import { emptyResponse } from '@/utils/sample/api.sample'
+import { faPenNib, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AxiosError } from 'axios'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function JobDetail() {
-  const auth = useAppSelector(selectAuth)
-  const navigate = useNavigate()
-  const applyJobRef = useRef<HTMLDialogElement>(null)
   const { id } = useParams()
-  const [job, setJob] = useState(emptyJob)
-  const [relatedJobs, setRelatedJobs] = useState<IJob[]>([])
-  const { isLoading } = useQuery(['job', id], () => jobsApi.get(id || ''), {
-    onSuccess: (response) => {
-      setJob(response.data)
-    },
-    onError: (_err) => {
-      const response = (_err as AxiosError).response?.data as ApiResponse<undefined>
-      toast.error(response.message)
-    },
+  const userId = useAppSelector(selectAuth).id
+  const applyJobRef = useRef<HTMLDialogElement>(null)
+  const navigate = useNavigate()
+  const [isJobApplied, setJobApplied] = useState(false)
+  const [isJobSaved, setJobSaved] = useState(false)
+
+  const {
+    data: { data: job },
+    isLoading,
+  } = useQuery({
+    queryKey: ['job', id],
+    queryFn: () => jobsApi.get(id || ''),
+    initialData: emptyResponse<IJob>(emptyJob),
   })
 
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: 'Việc làm', to: routes.jobs },
-    { label: job.name, to: '' },
-  ]
-
-  useQuery({
+  const { data: relatedJobsRes } = useQuery({
     queryKey: ['outstanding-jobs'],
     queryFn: jobsApi.getOutstandingJobs,
-    onSuccess: (response) => {
-      setRelatedJobs(() =>
-        response.data.map((job) => {
-          return { aplications: [], ...job }
-        }),
-      )
-    },
+    initialData: emptyResponse<IJob[]>([]),
+  })
+
+  const {
+    data: { data: savedJobs },
+  } = useQuery({
+    queryKey: ['saved-jobs'],
+    queryFn: () => userApi.getSavedJobs(userId),
+    initialData: emptyResponse<IJob[]>([]),
+    enabled: !!userId,
+  })
+
+  const {
+    data: { data: applications },
+  } = useQuery({
+    queryKey: [],
+    queryFn: () => userApi.getApplications(userId),
+    initialData: emptyResponse<ApplicationDetail[]>([]),
+    enabled: !!userId,
+  })
+
+  const saveJobMutation = useMutation({
+    mutationFn: (action: 'add' | 'remove') => userApi.saveJob(userId, job.id, action),
   })
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
+  useEffect(() => {
+    if (applications.length) {
+      setJobApplied(applications.some((application) => application.jobId === job.id))
+    }
+  }, [job.id, applications])
+
+  useEffect(() => {
+    if (savedJobs.length) {
+      setJobSaved(savedJobs.some((savedJob) => job.id === savedJob.id))
+    }
+  }, [job.id, savedJobs])
+
   const handleApplyJob = () => {
-    if (auth.id) {
+    if (userId) {
       applyJobRef.current?.showModal()
     } else {
       navigate({
@@ -69,6 +93,24 @@ export default function JobDetail() {
     }
   }
 
+  const handleSaveJob = (action: 'add' | 'remove') => {
+    !saveJobMutation.isPending &&
+      saveJobMutation.mutate(action, {
+        onSuccess: (res) => {
+          toast.success(res.message)
+          setJobSaved(action === 'add')
+        },
+        onError: () => {
+          toast.error('Đã xảy ra lỗi, xin thử lại')
+        },
+      })
+  }
+
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Việc làm', to: routes.jobs },
+    { label: job.name, to: '' },
+  ]
+
   return (
     <div className='mt-header px-4 py-4 lg:px-0'>
       <Container>
@@ -76,20 +118,39 @@ export default function JobDetail() {
           <Breadcrumbs items={breadcrumbItems} />
         </div>
         <div className='col-span-2 flex w-full flex-col gap-6'>
-          <JobInfo {...job} handleApply={handleApplyJob} />
+          <JobInfo
+            {...job}
+            isApplied={isJobApplied}
+            isSaved={isJobSaved}
+            handleApply={handleApplyJob}
+            handleUpdate={handleSaveJob}
+          />
           <JobDescription {...job} />
           {/* <Hashtags tags={job.tags.split(',')} /> */}
         </div>
         <div className='divider my-8'>
           <Button className='w-full lg:w-fit' variant='contain' color='primary' onClick={handleApplyJob}>
-            <FontAwesomeIcon icon={faPenNib} />
-            Ứng tuyển ngay
+            {isJobApplied ? (
+              <>
+                <FontAwesomeIcon icon={faRotateRight} />
+                Ứng tuyển lại
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faPenNib} />
+                Ứng tuyển ngay
+              </>
+            )}
           </Button>
         </div>
         <div className='w-full'>
           <h3 className='text-h3'>Có thể bạn cũng quan tâm</h3>
           <div className='grid grid-cols-1 gap-4 py-4 lg:grid-cols-3'>
-            {relatedJobs.map((job) => (job.id !== id ? <Job {...job} /> : <></>))}
+            {relatedJobsRes.data
+              .filter((job) => job.id !== id)
+              .map((job) => (
+                <Job key={job.id} {...job} />
+              ))}
           </div>
         </div>
         <dialog id='my_modal_1' className='modal bg-black/30' open={isLoading}>

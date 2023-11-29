@@ -1,19 +1,19 @@
 import { emptyUpdateJob } from '@/constants/jobs.constant'
 import { useAppSelector } from '@/hook/useAppSelector'
+import { selectAuth, selectProfile } from '@/redux/reducers/auth-slice'
 import { City } from '@/types/addresses.type'
 import { ApiResponse } from '@/types/api.type'
 import { Job as IJob, UpdateJob as IUpdateJob } from '@/types/jobs.type'
-import { selectAuth, selectProfile } from '@/redux/reducers/auth-slice'
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { QueryObserverResult, RefetchOptions } from 'react-query'
+import { useSearchParams } from 'react-router-dom'
 import Button from './Button'
 import DeleteJob from './DeleteJob'
 import Job from './Job'
 import TextInput from './TextInput'
 import UpdateJob from './UpdateJob'
-import { useSearchParams } from 'react-router-dom'
 
 type RecruiterJobsProps = {
   cities?: City[]

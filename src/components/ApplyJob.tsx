@@ -1,16 +1,16 @@
 import applicationsApi from '@/api/applications.api'
 import { emptyUpdateApplication } from '@/constants/applications.constant'
 import { useAppSelector } from '@/hook/useAppSelector'
+import { selectAuth } from '@/redux/reducers/auth-slice'
 import { ApiResponse } from '@/types/api.type'
 import { Application } from '@/types/applications.type'
 import { Job } from '@/types/jobs.type'
-import { selectAuth } from '@/redux/reducers/auth-slice'
 import { applicationSchema } from '@/utils/validators/application.validator'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { RefObject, forwardRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import Button from './Button'
 import TextInput from './TextInput'
@@ -111,7 +111,7 @@ const ApplyJob = forwardRef<HTMLDialogElement, ApplyJobProps>(({ id, name }, ref
             {errors.cv?.message && <div className='text-error'>{errors.cv?.message}</div>}
           </div>
           <Button
-            loading={useCreateApplication.isLoading}
+            loading={useCreateApplication.isPending}
             onClick={(e) => {
               e.preventDefault()
               if (!(getValues('cv') as FileList).length) {

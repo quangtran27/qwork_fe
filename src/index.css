@@ -44,3 +44,7 @@
 .text-h3 {
   @apply text-xl font-semibold;
 }
+
+.Toastify__toast {
+  @apply rounded-2xl;
+}

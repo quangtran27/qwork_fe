@@ -8,7 +8,7 @@ import { faImage, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AxiosError } from 'axios'
 import { ChangeEventHandler, useRef, useState } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Button from './Button'
@@ -76,7 +76,7 @@ export default function UpdateBackground() {
             </Button>
             <Button
               className='min-w-[200px]'
-              loading={udpateBackgroundMutation.isLoading}
+              loading={udpateBackgroundMutation.isPending}
               onClick={() => {
                 image && udpateBackgroundMutation.mutate({ id: profile.id, image: image })
               }}

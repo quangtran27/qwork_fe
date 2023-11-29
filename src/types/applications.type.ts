@@ -19,7 +19,7 @@ export type ApplicationDetail = {
   jobName: string
   jobSalaryFrom: number
   jobSalaryTo: number
-  recruiterId: string
+  recruiterUserId: string
   recruiterAvatar: string
   recruiterName: string
   created: string

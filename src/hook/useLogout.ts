@@ -5,7 +5,9 @@ import { store } from '@/redux/store'
 const useLogout = () => {
   const logout = async () => {
     store.dispatch(clearCredential())
-    await authApi.logout()
+    try {
+      await authApi.logout()
+    } catch {}
   }
   return logout
 }

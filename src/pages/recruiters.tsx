@@ -4,32 +4,31 @@ import Pagination from '@/components/Pagination'
 import Recruiter from '@/components/Recruiter'
 import SearchBox from '@/components/SearchBox'
 import routes from '@/configs/route.config'
-import { emptyPagination } from '@/constants/commons.constant'
 import { Profile } from '@/types/profile.type'
+import { emptyResponse } from '@/utils/sample/api.sample'
 import { faBuilding } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export default function Recruiters() {
-  const [recruiters, setRecruiters] = useState<Profile[]>([])
-  const [pagination, setPagination] = useState(emptyPagination)
   const [searchParams] = useSearchParams()
-
   const page = Number(searchParams.get('page') || '1')
 
-  const { refetch } = useQuery({
+  const {
+    data: { data: recruiters, pagination },
+    isFetched,
+    refetch,
+  } = useQuery({
     queryKey: ['all-recruiters', page],
     queryFn: () => recruitersApi.getAll({ page: page }),
-    onSuccess: (response) => {
-      setRecruiters(response.data)
-      setPagination(response.pagination)
-    },
+    initialData: emptyResponse<Profile[]>([]),
   })
 
   useEffect(() => {
-    refetch()
+    isFetched && refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, refetch])
 
   return (

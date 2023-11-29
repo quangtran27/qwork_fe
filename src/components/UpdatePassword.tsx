@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { InferType } from 'yup'
@@ -88,7 +88,7 @@ export default function UpdatePassword({}: UpdatePasswordProps) {
             />
             {errors.newPassword?.message && <div className='ml-4 mt-2 text-error'>{errors.newPassword?.message}</div>}
           </div>
-          <Button className='w-full' loading={useUpdatePassword.isLoading}>
+          <Button className='w-full' loading={useUpdatePassword.isPending}>
             Lưu lại
           </Button>
         </form>

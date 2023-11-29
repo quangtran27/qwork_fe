@@ -9,9 +9,9 @@ import { ProfileType } from '@/types/profile.type'
 import { handleImageError } from '@/utils/handlers/error-image.handler'
 import { faImage, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { ChangeEventHandler, useRef, useState } from 'react'
-import { useMutation } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Button from './Button'
@@ -83,7 +83,7 @@ export default function UpdateAvatar() {
           </Button>
           <Button
             className='min-w-[200px]'
-            loading={updateAvatarMutation.isLoading}
+            loading={updateAvatarMutation.isPending}
             onClick={() => {
               image && updateAvatarMutation.mutate({ id: profile.id, image: image })
             }}

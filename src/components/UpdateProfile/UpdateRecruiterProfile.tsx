@@ -10,7 +10,7 @@ import { recruiterProfileSchema } from '@/utils/validators/profile.validator'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import Button from '../Button'
 import TextInput from '../TextInput'
@@ -110,7 +110,7 @@ export default function UpdateRecruiterProfile({ ...props }: Props) {
         />
       </label>
       <div className='flex flex-col'>
-        <Button loading={useUpdateProfile.isLoading}>Lưu lại</Button>
+        <Button loading={useUpdateProfile.isPending}>Lưu lại</Button>
       </div>
     </form>
   )

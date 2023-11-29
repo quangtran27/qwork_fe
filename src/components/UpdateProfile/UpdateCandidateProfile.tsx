@@ -12,7 +12,7 @@ import { candidateProfileSchema } from '@/utils/validators/profile.validator'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { Controller, useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 type UpdateCandidateProfileProps = {
@@ -168,7 +168,7 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
       </label>
       <div className='flex flex-col'>
         <span></span>
-        <Button className='w-full' loading={useUpdateProfile.isLoading}>
+        <Button className='w-full' loading={useUpdateProfile.isPending}>
           Lưu lại
         </Button>
       </div>

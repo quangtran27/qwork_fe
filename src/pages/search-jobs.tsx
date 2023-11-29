@@ -3,26 +3,25 @@ import Container from '@/components/Container'
 import Job from '@/components/Job'
 import Pagination from '@/components/Pagination'
 import SearchBox from '@/components/SearchBox'
-import { emptyPagination } from '@/constants/commons.constant'
 import { Job as IJob } from '@/types/jobs.type'
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import { emptyResponse } from '@/utils/sample/api.sample'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export default function SearchJobs() {
   const [searchParams] = useSearchParams()
-  const [jobs, setJobs] = useState<IJob[]>([])
-  const [pagination, setPagingation] = useState(emptyPagination)
 
   const keyword = searchParams.get('keyword') || ''
   const page = searchParams.get('page') || '1'
 
-  const { refetch } = useQuery({
+  const {
+    data: { data: jobs, pagination },
+    refetch,
+  } = useQuery({
+    queryKey: ['jobs', keyword, page],
     queryFn: () => jobsApi.getAll({ keyword: keyword, page: page }),
-    onSuccess: (response) => {
-      setJobs(response.data)
-      setPagingation(response.pagination)
-    },
+    initialData: emptyResponse<IJob[]>([]),
   })
 
   useEffect(() => {

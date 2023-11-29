@@ -7,7 +7,7 @@ import { selectAuth } from '@/redux/reducers/auth-slice'
 import { applicationStatusToString } from '@/utils/converters/application.converter'
 import { handleImageError } from '@/utils/handlers/error-image.handler'
 import { useState } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import ApplicationDetail from './ApplicationDetail'
@@ -91,7 +91,7 @@ export default function Application({ ...props }: ApplicationProps) {
             </figure>
           </Link>
           <div className='flex flex-1 flex-col gap-1 pl-4'>
-            <Link to={routes.jobDetail.replace(':id', props.id)}>
+            <Link to={routes.jobDetail.replace(':id', props.jobId)}>
               <TooltipText
                 className='text-lg font-bold hover:text-primary'
                 content={props.jobName}
@@ -100,7 +100,7 @@ export default function Application({ ...props }: ApplicationProps) {
               />
             </Link>
             <div className='flex items-center justify-between text-gray-500'>
-              <Link className='link-hover' to={routes.profile.replace(':id', props.recruiterId)}>
+              <Link className='link-hover' to={routes.profile.replace(':id', props.recruiterUserId)}>
                 {props.recruiterName}
               </Link>
               <span className='text-base font-bold text-secondary'>

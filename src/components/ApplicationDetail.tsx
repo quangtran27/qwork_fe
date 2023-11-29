@@ -4,7 +4,7 @@ import { ApplicationStatusEnum, ApplicationDetail as IApplicationDetail } from '
 import { applicationStatusToString } from '@/utils/converters/application.converter'
 import { faCheck, faEnvelope, faFileLines, faPhone, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { UseMutationResult } from 'react-query'
+import { UseMutationResult } from '@tanstack/react-query'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Button from './Button'
 

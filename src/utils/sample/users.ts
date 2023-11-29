@@ -9,12 +9,6 @@ export const emptyUser = {
   role: UserRoles.candidate,
 }
 
-export const emptyLoginUser = {
-  email: '',
-  password: '',
-  role: UserRoles.candidate,
-}
-
 export const recruiter: User = {
   id: '1',
   name: 'Trần Văn Quảng',

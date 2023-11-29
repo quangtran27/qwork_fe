@@ -65,7 +65,9 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <span onClick={handleLogout}>Đăng xuất</span>
+                    <span onClick={handleLogout} className='text-error hover:text-error'>
+                      Đăng xuất
+                    </span>
                   </li>
                 </ul>
               </div>

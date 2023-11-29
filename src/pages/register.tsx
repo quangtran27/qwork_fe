@@ -3,8 +3,6 @@ import Button from '@/components/Button'
 import TextInput from '@/components/TextInput'
 import routes from '@/configs/route.config'
 import { roleOptions } from '@/constants/users.constant'
-import { useAppSelector } from '@/hook/useAppSelector'
-import { selectAuth } from '@/redux/reducers/auth-slice'
 import { ApiResponse } from '@/types/api.type'
 import { User } from '@/types/users.type'
 import { emptyUser } from '@/utils/sample/users'
@@ -21,19 +19,14 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function Register() {
-  const token = useAppSelector(selectAuth).token
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (token) navigate(routes.home)
-  }, [token, navigate])
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -48,7 +41,7 @@ export default function Register() {
     resolver: yupResolver(userSchema),
   })
 
-  const mutation = useMutation({
+  const registerMutation = useMutation({
     mutationFn: (user: User) => userApi.createUser(user),
     onSuccess: (response) => {
       if (response.success) {
@@ -66,7 +59,7 @@ export default function Register() {
   })
 
   const handleRegister = handleSubmit((user) => {
-    mutation.mutate(user as User)
+    registerMutation.mutate(user as User)
   })
 
   return (
@@ -147,7 +140,7 @@ export default function Register() {
               )}
             />
           </div>
-          <Button loading={mutation.isLoading} className='w-full'>
+          <Button loading={registerMutation.isPending} className='w-full'>
             Đăng ký
           </Button>
           <p className='text-center'>
