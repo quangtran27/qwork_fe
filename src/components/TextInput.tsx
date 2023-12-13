@@ -19,7 +19,7 @@ const TextInput = forwardRef<Ref, TextInputProps>(
 
     const mergedClass = clsx(
       insideClass,
-      'input bg-base-200 placeholder:font-medium w-full rounded-full',
+      'input border border-gray-200 bg-gray-100 placeholder:font-medium w-full rounded-full',
       iconLeft && 'pl-10',
       iconRight && 'pr-10',
     )

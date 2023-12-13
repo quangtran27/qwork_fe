@@ -1,8 +1,7 @@
 import { Job, UpdateJob } from '@/types/jobs.type'
 import { nationwide } from './location.constant'
 
-const emptyJobDescription =
-  '{"blocks":[{"key":"b1n3k","text":"Nhập mô tả cho công việc của bạn tại đây!","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
+const emptyJobDescription = '{"blocks":[],"entityMap":{}}'
 
 export const emptyJob: Job = {
   id: '',

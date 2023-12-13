@@ -11,18 +11,16 @@ import { faImage, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { ChangeEventHandler, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ChangeEventHandler, RefObject, forwardRef, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Button from './Button'
 
-export default function UpdateAvatar() {
+const UpdateAvatar = forwardRef<HTMLDialogElement>(({}, ref) => {
   const profile = useAppSelector(selectProfile)
-  const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
-  const navigate = useNavigate()
   const [image, setImage] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | ArrayBuffer>(profile.avatar)
+  const dispatch = useAppDispatch()
 
   const handleChangeImage: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0]
@@ -37,7 +35,7 @@ export default function UpdateAvatar() {
   }
 
   const handleCloseModal = () => {
-    navigate('')
+    ;(ref as RefObject<HTMLDialogElement>).current?.close()
   }
 
   const updateAvatarMutation = useMutation({
@@ -58,7 +56,7 @@ export default function UpdateAvatar() {
   })
 
   return (
-    <dialog id='update-avatar-modal' className='modal' open>
+    <dialog id='update-avatar-modal' className='modal' ref={ref}>
       <div className='modal-box max-w-screen-md'>
         <h3 className='text-h3 text-center'>Cập nhật ảnh đại diện</h3>
         <div className='mt-4 flex flex-col items-center justify-center gap-4'>
@@ -99,4 +97,7 @@ export default function UpdateAvatar() {
       <div className='modal-backdrop bg-black/20' onClick={handleCloseModal} />
     </dialog>
   )
-}
+})
+
+UpdateAvatar.displayName = 'UpdateAvatar'
+export default UpdateAvatar

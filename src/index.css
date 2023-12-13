@@ -46,5 +46,5 @@
 }
 
 .Toastify__toast {
-  @apply rounded-2xl;
+  @apply rounded-xl;
 }

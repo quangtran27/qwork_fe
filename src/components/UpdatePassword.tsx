@@ -1,30 +1,23 @@
 import authApi from '@/api/auth.api'
 import { ApiResponse } from '@/types/api.type'
-import { updatePasswordSchema } from '@/utils/validators/user'
+import { updatePasswordSchema } from '@/utils/validators/user.validator'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { AxiosError } from 'axios'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
+import { RefObject, forwardRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { InferType } from 'yup'
 import Button from './Button'
 import TextInput from './TextInput'
 
-type UpdatePasswordProps = object
 type UpdatePasswordSchema = InferType<typeof updatePasswordSchema>
 
-export default function UpdatePassword({}: UpdatePasswordProps) {
-  const navigate = useNavigate()
+const UpdatePassword = forwardRef<HTMLDialogElement>(({}, ref) => {
   const [showOldPassword, setShowOldPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
-
-  const handleCloseModal = () => {
-    navigate('')
-  }
 
   const {
     formState: { errors },
@@ -38,7 +31,7 @@ export default function UpdatePassword({}: UpdatePasswordProps) {
     mutationFn: (data: { oldPassword: string; newPassword: string }) => authApi.changePassword(data),
     onSuccess: () => {
       toast.success('Cập nhật mật khẩu thành công!')
-      handleCloseModal()
+      ;(ref as RefObject<HTMLDialogElement>).current?.close()
     },
     onError: (_err) => {
       const axiosError = _err as AxiosError
@@ -52,7 +45,7 @@ export default function UpdatePassword({}: UpdatePasswordProps) {
   })
 
   return (
-    <dialog id='update-avatar-modal' className='modal' open>
+    <dialog id='update-avatar-modal' className='modal' ref={ref}>
       <div className='max-w-screen-xs modal-box p-4 lg:p-6'>
         <h3 className='text-h3 text-center'>Cập nhật mật khẩu</h3>
         <form className='mt-4 flex flex-col items-center justify-center gap-4' onSubmit={handleUpdatePassword}>
@@ -92,11 +85,16 @@ export default function UpdatePassword({}: UpdatePasswordProps) {
             Lưu lại
           </Button>
         </form>
-        <button className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2' onClick={handleCloseModal}>
-          ✕
-        </button>
+        <form method='dialog'>
+          <button className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2'>✕</button>
+        </form>
       </div>
-      <div className='modal-backdrop bg-black/20' onClick={handleCloseModal} />
+      <div className='modal-backdrop bg-black/20'>
+        <button>close</button>
+      </div>
     </dialog>
   )
-}
+})
+
+UpdatePassword.displayName = 'UpdatePassword'
+export default UpdatePassword

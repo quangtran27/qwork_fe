@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
-import { ChangeEventHandler, MouseEventHandler, forwardRef, useRef, useState } from 'react'
+import { ChangeEventHandler, MouseEventHandler, forwardRef, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Button from './Button'
@@ -42,7 +42,7 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
       EditorState.createWithContent(convertFromRaw(JSON.parse(job.description))),
     )
 
-    const useJob = useMutation({
+    const updateJobMutation = useMutation({
       mutationFn: (job: UpdateJob) => (mode === 'create' ? jobsApi.createJob(job) : jobsApi.updateJob(job)),
       onSuccess: () => {
         toast.success(`${mode === 'create' ? 'Đăng' : 'Cập nhật'} tin tuyển dụng thành công`)
@@ -68,8 +68,12 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
     }
 
     const handleSave = handleSubmit((job) => {
-      useJob.mutate(job)
+      updateJobMutation.mutate(job)
     })
+
+    useEffect(() => {
+      mode === 'update' && setValue('expired', job.expired.split('/').reverse().join('-'))
+    }, [job.expired, mode, setValue])
 
     return (
       <dialog id='my_modal_2' className='modal' ref={ref}>
@@ -147,7 +151,6 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
               <label className='mb-1 block'>Ngày hết hạn:</label>
               <input
                 className='input input-bordered col-span-2 mr-4 rounded-full'
-                placeholder='dd-mm-yyyy'
                 type='date'
                 {...register('expired')}
               />
@@ -158,7 +161,7 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
               {errors.cityCode?.message && <div className='text-error'>{errors.cityCode?.message}</div>}
               <TextEditor editorState={editorState} setEditorState={setEditorState} />
             </div>
-            <Button loading={useJob.isPending} onClick={handlePostJob}>
+            <Button loading={updateJobMutation.isPending} onClick={handlePostJob}>
               {mode === 'create' ? 'Đăng tin' : 'Cập nhật'}
             </Button>
           </form>

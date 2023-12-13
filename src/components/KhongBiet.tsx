@@ -6,7 +6,7 @@ import { ApplicationDetail } from '@/types/applications.type'
 import { emptyResponse } from '@/utils/sample/api.sample'
 import { useQuery } from '@tanstack/react-query'
 
-export default function Applications() {
+export default function CandidateApplications() {
   const profile = useAppSelector(selectProfile)
 
   const {
@@ -28,7 +28,7 @@ export default function Applications() {
           <option>Đã bị từ chối</option>
         </select>
       </div>
-      <div className='mt-4 grid grid-cols-2  gap-6 py-6'>
+      <div className='mt-4 grid grid-cols-2  gap-4 py-4'>
         {applications.map((application) => (
           <Application key={application.id} {...application} />
         ))}

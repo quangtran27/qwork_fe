@@ -1,7 +1,10 @@
-import Applications from '@/pages/profile.tsx/candidate-profile/tabs/applications'
-import Introduce from '@/pages/profile.tsx/candidate-profile/tabs/introduce'
-import SavedJobs from '@/pages/profile.tsx/candidate-profile/tabs/saved-jobs'
-import { Profile, ProfileType } from '@/types/profile.type'
+import CandidateApplications from '@/components/CandidateApplications'
+import CandidateIntroduce from '@/components/CandidateIntroduce'
+import CandidateSavedJobs from '@/components/CandidateSavedJobs'
+import RecruiterIntroduce from '@/components/RecruiterIntroduce'
+import RecruiterJobs from '@/components/RecruiterJobs'
+import { Profile, ProfileTab, ProfileType } from '@/types/profile.type'
+import { faAddressCard, faBookmark, faBriefcase } from '@fortawesome/free-solid-svg-icons'
 
 export const emptyProfile: Profile = {
   type: ProfileType.guest,
@@ -19,21 +22,43 @@ export const emptyProfile: Profile = {
   email: '',
 }
 
-export const candidateProfileTabs = [
+export const candidateProfileTabs: ProfileTab[] = [
   {
-    label: 'Thông tin cá nhân',
+    label: 'Trang cá nhân',
     value: 'personal',
-    tab: Introduce,
+    icon: faAddressCard,
+    tab: CandidateIntroduce,
+    isPrivate: false,
   },
   {
-    label: 'Việc làm đã ứng tuyển',
+    label: 'Đơn ứng tuyển',
     value: 'applications',
-    tab: Applications,
+    icon: faBriefcase,
+    tab: CandidateApplications,
+    isPrivate: true,
   },
   {
     label: 'Việc làm đã lưu',
-    value: 'saved jobs',
-    tab: SavedJobs,
+    value: 'saved-jobs',
+    icon: faBookmark,
+    tab: CandidateSavedJobs,
+    isPrivate: true,
   },
 ]
-export const recruiterProfileTabs = ['Tin tuyển dụng']
+
+export const recruiterProfileTabs: ProfileTab[] = [
+  {
+    label: 'Tin tuyển dụng',
+    value: 'jobs',
+    icon: faBriefcase,
+    tab: RecruiterJobs,
+    isPrivate: false,
+  },
+  {
+    label: 'Trang cá nhân',
+    value: 'personal',
+    icon: faAddressCard,
+    tab: RecruiterIntroduce,
+    isPrivate: false,
+  },
+]

@@ -1,6 +1,7 @@
 import { ContentBlock, DraftStyleMap, Editor, EditorCommand, EditorState, RichUtils } from 'draft-js'
 import { Dispatch, useEffect, useRef } from 'react'
 import Toolbar from './Toolbar'
+import Card from './Card'
 
 type TextEditorProps = {
   editorState: EditorState
@@ -84,20 +85,22 @@ export default function TextEditor({ editorState, setEditorState }: TextEditorPr
   }
 
   return (
-    <div className='rounded-3xl border bg-white p-4' onClick={focusEditor}>
-      <Toolbar editorState={editorState} setEditorState={setEditorState} />
-      <div className='prose min-h-[400px] w-full max-w-full rounded-xl border p-4'>
-        <Editor
-          ref={editor}
-          handleKeyCommand={handleKeyCommand}
-          editorState={editorState}
-          customStyleMap={styleMap}
-          blockStyleFn={myBlockStyleFn}
-          onChange={(editorState) => {
-            setEditorState(editorState)
-          }}
-        />
+    <Card size='sm'>
+      <div onClick={focusEditor}>
+        <Toolbar editorState={editorState} setEditorState={setEditorState} />
+        <div className='prose min-h-[400px] w-full max-w-full rounded-lg border bg-gray-100 p-4'>
+          <Editor
+            ref={editor}
+            handleKeyCommand={handleKeyCommand}
+            editorState={editorState}
+            customStyleMap={styleMap}
+            blockStyleFn={myBlockStyleFn}
+            onChange={(editorState) => {
+              setEditorState(editorState)
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </Card>
   )
 }

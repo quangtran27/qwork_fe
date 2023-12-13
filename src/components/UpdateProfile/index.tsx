@@ -1,31 +1,31 @@
 import { useAppSelector } from '@/hook/useAppSelector'
 import { selectProfile } from '@/redux/reducers/auth-slice'
-import { useNavigate } from 'react-router-dom'
+import { RefObject, forwardRef } from 'react'
 import UpdateCandidateProfile from './UpdateCandidateProfile'
 import UpdateRecruiterProfile from './UpdateRecruiterProfile'
 
-export default function UpdateProfile() {
-  const navigate = useNavigate()
+const UpdateProfile = forwardRef<HTMLDialogElement>(({}, ref) => {
   const profile = useAppSelector(selectProfile)
 
-  const handleCloseModal = () => {
-    navigate('')
-  }
-
   return (
-    <dialog id='update-profile-modal' className='modal' open>
-      <div className='modal-box max-w-screen-md p-4 lg:w-[722px] lg:p-6'>
-        <h3 className='text-h3'>Cập nhật thông tin cá nhân</h3>
+    <dialog id='update-profile-modal' className='modal' ref={ref}>
+      <div className='modal-box max-w-screen-md p-4 lg:w-[922px] lg:p-6'>
+        <h3 className='text-h3'>Cập nhật thông tin hồ sơ</h3>
         {profile.type === 'candidate' ? (
-          <UpdateCandidateProfile handleCloseModal={handleCloseModal} />
+          <UpdateCandidateProfile parentRef={ref as RefObject<HTMLDialogElement>} />
         ) : (
-          <UpdateRecruiterProfile handleCloseModal={handleCloseModal} />
+          <UpdateRecruiterProfile parentRef={ref as RefObject<HTMLDialogElement>} />
         )}
-        <button className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2' onClick={handleCloseModal}>
-          ✕
-        </button>
+        <form method='dialog'>
+          <button className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2'>✕</button>
+        </form>
       </div>
-      <div className='modal-backdrop bg-black/20' onClick={handleCloseModal} />
+      <form method='dialog' className='modal-backdrop bg-black/20'>
+        <button>close</button>
+      </form>
     </dialog>
   )
-}
+})
+
+UpdateProfile.displayName = 'UpdateProfile'
+export default UpdateProfile

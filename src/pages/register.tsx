@@ -6,7 +6,7 @@ import { roleOptions } from '@/constants/users.constant'
 import { ApiResponse } from '@/types/api.type'
 import { User } from '@/types/users.type'
 import { emptyUser } from '@/utils/sample/users'
-import { userSchema } from '@/utils/validators/user'
+import { userSchema } from '@/utils/validators/user.validator'
 import {
   faChevronLeft,
   faEnvelope,
@@ -18,10 +18,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { AxiosError } from 'axios'
-import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -35,6 +35,7 @@ export default function Register() {
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
   } = useForm({
     mode: 'onSubmit',
     defaultValues: emptyUser,
@@ -46,7 +47,11 @@ export default function Register() {
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response.message)
-        navigate(routes.login)
+        navigate(routes.registerSuccess, {
+          state: {
+            email: response.data.email,
+          },
+        })
       } else {
         toast.error(response.message)
       }
@@ -62,6 +67,10 @@ export default function Register() {
     registerMutation.mutate(user as User)
   })
 
+  useEffect(() => {
+    setValue('id', '0')
+  }, [setValue])
+
   return (
     <main className='relative z-20 flex h-screen w-screen items-center justify-center bg-login'>
       <div className='max-w-full bg-white px-4 py-12 shadow-sm md:rounded-3xl md:p-8'>
@@ -75,7 +84,7 @@ export default function Register() {
           <div className='mb-6'>
             <TextInput
               iconLeft={<FontAwesomeIcon icon={faUser} />}
-              placeholder='Họ và tên'
+              placeholder='Nguyễn Văn A'
               type='text'
               error={!!errors.name}
               errorMessage={errors.name?.message}
@@ -84,7 +93,7 @@ export default function Register() {
             <TextInput
               className='mt-3'
               iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
-              placeholder='Nhập địa chỉ email'
+              placeholder='nguyenvana@gmail.com'
               error={!!errors.email}
               errorMessage={errors.email?.message}
               {...register('email')}
@@ -92,7 +101,7 @@ export default function Register() {
             <TextInput
               className='mt-3'
               iconLeft={<FontAwesomeIcon icon={faPhone} />}
-              placeholder='Nhập số điện thoại'
+              placeholder='0312345678'
               error={!!errors.phone}
               errorMessage={errors.phone?.message}
               {...register('phone')}
@@ -100,7 +109,7 @@ export default function Register() {
             <TextInput
               className='mt-3'
               iconLeft={<FontAwesomeIcon icon={faLock} />}
-              placeholder='Nhập mật khẩu'
+              placeholder='••••••••'
               type={showPassword ? 'text' : 'password'}
               iconRight={
                 <span className='cursor-pointer select-none' onClick={() => setShowPassword((prev) => !prev)}>

@@ -8,7 +8,7 @@ import TextInput from './TextInput'
 export default function Footer() {
   return (
     <footer className='lg:px bg-[#25314e] p-4 text-lg text-white lg:pt-8 lg:text-base'>
-      <div className='mx-auto grid max-w-screen-xl grid-cols-1 gap-6 py-6 lg:grid-cols-5'>
+      <div className='mx-auto grid max-w-screen-xl grid-cols-1 gap-4 py-4 lg:grid-cols-5'>
         <div className='flex flex-col items-center justify-center gap-4'>
           <Link to={routes.home} className='relative block h-20 w-20'>
             <img src='/images/logo_square.png' alt='' className='absolute inset-0' />

@@ -21,6 +21,7 @@ import Button from './Button'
 type JobInfoProps = Job & {
   isSaved?: boolean
   isApplied?: boolean
+  isUpdating?: boolean
   handleApply?: () => void
   handleUpdate?: (action: 'add' | 'remove') => void
 }
@@ -67,9 +68,10 @@ export default function JobInfo({ ...props }: JobInfoProps) {
           <div className='cursor-default rounded-full bg-gray-100 px-3 py-1 shadow'>
             <span className={dateClass}>{dateDisplay}</span>
           </div>
-          {[UserRoles.candidate, UserRoles.guest].includes(auth.role) && (
+          {[UserRoles.candidate, UserRoles.guest].includes(auth.user.role) && (
             <div className='flex w-full flex-col gap-4 lg:w-fit lg:flex-row'>
               <Button
+                loading={props.isUpdating}
                 variant='outline'
                 color='secondary'
                 onClick={() => {

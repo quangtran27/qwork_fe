@@ -8,7 +8,8 @@ const recruitersApi = {
   getAll: async (options?: object) =>
     (await axios.get<ApiResponse<Profile[]>>('/recruiters', { params: options })).data,
   getOutstandingRecruiters: async () => (await axios.get<ApiResponse<Profile[]>>('/recruiters/outstanding')).data,
-  getRecruiterJobs: async (id: string) => (await axios.get<ApiResponse<Job[]>>(`/recruiters/${id}/jobs`)).data,
+  getRecruiterJobs: async (id: string, option?: object) =>
+    (await axios.get<ApiResponse<Job[]>>(`/recruiters/${id}/jobs`, { params: { ...option } })).data,
   updateProfile: async (id: string, profile: RecruiterProfile) =>
     (await axiosPrivate.put<ApiResponse<Profile>>(`recruiters/${id}`, profile)).data,
   updateAvatar: async (id: string, avatar: File) => {

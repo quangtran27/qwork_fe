@@ -5,10 +5,10 @@ import { Job as IJob } from '@/types/jobs.type'
 import { ProfileType } from '@/types/profile.type'
 import { countExpired } from '@/utils/functions/job.function'
 import { handleImageError } from '@/utils/handlers/error-image.handler'
-import { faLocation, faNewspaper, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faNewspaper, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Application from './Application'
 import Button from './Button'
 import TooltipText from './TooltipText'
@@ -44,6 +44,14 @@ export default function Job({
   const auth = useAppSelector(selectAuth)
   const [dateDisplay, dateClass] = countExpired(expired)
   const [status] = useState(_status)
+  const [searchParams] = useSearchParams()
+
+  const handleShowApplciations = () => {
+    searchParams.set('show', showApplications ? '' : id)
+    navigate({
+      search: searchParams.toString(),
+    })
+  }
 
   return (
     <div className='flex cursor-pointer flex-col rounded-2xl border bg-white p-4 shadow-sm transition-all'>
@@ -66,7 +74,7 @@ export default function Job({
             <TooltipText className='pr-10 text-lg font-semibold' content={name} description={name} ellipsis />
             {showController &&
               profile.type === ProfileType.recruiter &&
-              profile.userId === auth.id &&
+              profile.userId === auth.user.id &&
               (status ? (
                 <span className='badge badge-info whitespace-nowrap'>Đang tuyển dụng</span>
               ) : (
@@ -87,23 +95,23 @@ export default function Job({
           </span>
           <span className={`${dateClass} text-base`}>{dateDisplay}</span>
           <div className='flex items-center gap-2 text-gray-600'>
-            <FontAwesomeIcon icon={faLocation} />
+            <FontAwesomeIcon icon={faLocationDot} />
             <span>{cityName}</span>
           </div>
         </div>
       </div>
-      {showController && profile.type === ProfileType.recruiter && userId === auth.id && (
+      {showController && profile.type === ProfileType.recruiter && userId === auth.user.id && (
         <>
           <div className='divider'></div>
           <div className='flex flex-col items-center justify-between gap-3 lg:flex-row'>
             <div>Cập nhật lần cuối: {updated}</div>
             <div className='flex justify-end gap-3'>
-              <Link to={showApplications ? '' : `?${new URLSearchParams({ show: id })}`} className='indicator mr-2'>
+              <div onClick={handleShowApplciations} className='indicator mr-2'>
                 <span className='badge indicator-item badge-secondary'>{applications?.length}</span>
                 <Button size='sm' variant={showApplications ? 'contain' : 'outline'}>
                   <FontAwesomeIcon icon={faNewspaper} /> Đơn ứng tuyển
                 </Button>
-              </Link>
+              </div>
               <Button color='warning' variant='outline' size='sm' onClick={onEdit}>
                 <FontAwesomeIcon icon={faPenToSquare} />
               </Button>

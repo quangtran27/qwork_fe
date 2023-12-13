@@ -1,5 +1,5 @@
 import axios, { axiosAuth, axiosPrivate } from '@/api/axios-instance'
-import { CheckResetPasswordCodeSchema, LoginUserSchema, SetNewPasswordSchema } from '@/utils/validators/user'
+import { EmailSchema, LoginUserSchema, ResetPasswordSchema } from '@/utils/validators/user.validator'
 import { ApiResponse, LoginData } from '../types/api.type'
 
 const authApi = {
@@ -18,12 +18,10 @@ const authApi = {
         ...data,
       })
     ).data,
-  requestResetPasswordToken: async ({ ...data }: { email: string }) =>
-    (await axios.post<ApiResponse<string>>('auth/request-password-reset', { ...data })).data,
-  checkRequessPasswordToken: async ({ ...data }: CheckResetPasswordCodeSchema) =>
-    (await axios.get<ApiResponse<null>>(`auth/password-reset/${data.token}/${data.email}`)).data,
-  doneResetPassword: async ({ ...data }: SetNewPasswordSchema) =>
-    (await axios.patch<ApiResponse<null>>('auth/password-reset-done', { ...data })).data,
+  requestResetPasswordToken: async (data: EmailSchema) =>
+    (await axios.post<ApiResponse<string>>('auth/reset-password', data)).data,
+  resetPassword: async (data: ResetPasswordSchema) =>
+    (await axios.patch<ApiResponse<null>>('auth/reset-password', data)).data,
 }
 
 export default authApi

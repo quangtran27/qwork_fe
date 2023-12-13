@@ -6,20 +6,18 @@ import { setProfile } from '@/redux/reducers/profile-slice'
 import { ApiResponse } from '@/types/api.type'
 import { faImage, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AxiosError } from 'axios'
-import { ChangeEventHandler, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
+import { ChangeEventHandler, RefObject, forwardRef, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Button from './Button'
 
-export default function UpdateBackground() {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
+const UpdateBackground = forwardRef<HTMLDialogElement>(({}, ref) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const profile = useAppSelector(selectProfile)
   const [image, setImage] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | ArrayBuffer>(profile.background!)
+  const dispatch = useAppDispatch()
 
   const handleChangeImage: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0]
@@ -49,11 +47,11 @@ export default function UpdateBackground() {
   })
 
   const handleCloseModal = () => {
-    navigate('')
+    ;(ref as RefObject<HTMLDialogElement>).current?.close()
   }
 
   return (
-    <dialog id='update-avatar-modal' className='modal' open>
+    <dialog id='update-avatar-modal' className='modal' ref={ref}>
       <div className='modal-box max-w-screen-2xl'>
         <h3 className='text-h3 text-center'>Cập nhật ảnh bìa</h3>
         <div className='mt-4 flex flex-col items-center justify-center gap-4'>
@@ -86,11 +84,14 @@ export default function UpdateBackground() {
             </Button>
           </div>
         </div>
-        <button className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2' onClick={handleCloseModal}>
-          ✕
-        </button>
       </div>
-      <div className='modal-backdrop bg-black/20' onClick={handleCloseModal} />
+      <form className='modal-backdrop bg-black/20'>
+        <button className='btn btn-circle btn-ghost btn-sm absolute right-2 top-2'>✕</button>
+        <button>close</button>
+      </form>
     </dialog>
   )
-}
+})
+
+UpdateBackground.displayName = 'UpdateBackground'
+export default UpdateBackground

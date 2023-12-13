@@ -13,4 +13,5 @@ export type User = {
   email: string
   password: string
   role: UserRoles
+  isActive: boolean
 }

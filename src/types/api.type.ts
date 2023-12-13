@@ -1,4 +1,4 @@
-import { UserRoles } from './users.type'
+import { User } from './users.type'
 
 export type ApiResponse<Data> = {
   success: boolean
@@ -14,8 +14,6 @@ export type PaginationParams = {
 }
 
 export type LoginData = {
-  id: string
-  name: string
-  role: UserRoles
   token: string
+  user: User
 }

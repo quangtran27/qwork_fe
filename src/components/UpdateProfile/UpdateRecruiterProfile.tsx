@@ -1,33 +1,40 @@
 import recruitersApi from '@/api/recruiters.api'
 import { useAppDispatch } from '@/hook/useAppDispatch'
 import { useAppSelector } from '@/hook/useAppSelector'
-import { ApiResponse } from '@/types/api.type'
-import { ProfileType, RecruiterProfile } from '@/types/profile.type'
 import { selectProfile } from '@/redux/reducers/auth-slice'
 import { setProfile } from '@/redux/reducers/profile-slice'
+import { ApiResponse } from '@/types/api.type'
+import { ProfileType, RecruiterProfile } from '@/types/profile.type'
 import { profileToRecruiterProfile } from '@/utils/converters/profile.converter'
 import { recruiterProfileSchema } from '@/utils/validators/profile.validator'
+import { faEnvelope, faLocationDot, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { AxiosError } from 'axios'
-import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
+import { MouseEventHandler, RefObject, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Button from '../Button'
+import TextEditor from '../TextEditor'
 import TextInput from '../TextInput'
 
 type Props = {
-  handleCloseModal: () => void
+  parentRef: RefObject<HTMLDialogElement>
 }
 
 export default function UpdateRecruiterProfile({ ...props }: Props) {
   const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
   const recruiterProfile = { ...profileToRecruiterProfile(profile) }
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   const {
-    register,
     formState: { errors },
+    register,
     handleSubmit,
+    setValue,
   } = useForm({
     mode: 'onSubmit',
     defaultValues: recruiterProfile,
@@ -40,7 +47,7 @@ export default function UpdateRecruiterProfile({ ...props }: Props) {
       if (response.success) {
         toast.success('Cập nhật thành công')
         dispatch(setProfile({ ...response.data, type: ProfileType.recruiter }))
-        props.handleCloseModal()
+        props.parentRef.current?.close()
       }
     },
     onError: (_err) => {
@@ -50,67 +57,77 @@ export default function UpdateRecruiterProfile({ ...props }: Props) {
     },
   })
 
+  const handleUpdateProfile: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setValue('description', JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+    handleSave()
+  }
+
   const handleSave = handleSubmit((_profile) => {
     useUpdateProfile.mutate(_profile)
   })
 
+  useEffect(() => {
+    try {
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(profile.description))))
+    } catch {}
+  }, [profile.description])
+
   return (
     <form className='mt-4 flex flex-col gap-4' onSubmit={handleSave}>
-      <label className='flex w-full flex-col items-start gap-2' htmlFor='candidate-name'>
-        <span>Họ và tên:</span>
+      <div className='flex w-full flex-col items-start gap-2'>
+        <span className='font-medium'>Họ và tên:</span>
         <TextInput
           className='w-full'
-          id='candidate-name'
-          placeholder='Nhập họ và tên'
+          iconLeft={<FontAwesomeIcon icon={faUser} />}
+          placeholder='Nhập tên công ty/tổ chức...'
           error={!!errors.name}
           errorMessage={errors.name?.message}
           {...register('name')}
         />
-      </label>
-      <label className='flex w-full flex-col items-start gap-2' htmlFor='candidate-phone'>
-        <span>Số điện thoại:</span>
+      </div>
+      <div className='flex w-full flex-col items-start gap-2'>
+        <span className='font-medium'>Số điện thoại:</span>
         <TextInput
           className='w-full'
-          id='candidate-phone'
-          placeholder='Nhập số điện thoại'
+          iconLeft={<FontAwesomeIcon icon={faPhone} />}
+          placeholder='Nhập số điện thoại...'
           error={!!errors.phone}
           errorMessage={errors.phone?.message}
           {...register('phone')}
         />
-      </label>
-      <label className='flex w-full flex-col items-start gap-2' htmlFor='candidate-address'>
-        <span>Địa chỉ:</span>
+      </div>
+      <div className='flex w-full flex-col items-start gap-2'>
+        <span className='font-medium'>Địa chỉ:</span>
         <TextInput
           className='w-full'
-          id='candidate-address'
-          placeholder='Nhập địa chỉ'
+          iconLeft={<FontAwesomeIcon icon={faLocationDot} />}
+          placeholder='Nhập địa chỉ...'
           error={!!errors.address}
           errorMessage={errors.address?.message}
           {...register('address')}
         />
-      </label>
-      <label className='flex w-full flex-col items-start gap-2' htmlFor='candidate-email'>
-        <span>Email:</span>
+      </div>
+      <div className='flex w-full flex-col items-start gap-2'>
+        <span className='font-medium'>Email:</span>
         <TextInput
           className='w-full'
-          id='candidate-email'
-          placeholder='Nhập email'
+          iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
+          placeholder='Nhập email...'
           error={!!errors.email}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
-      </label>
-      <label className='flex w-full flex-col items-start gap-2' htmlFor='candidate-email'>
-        <span>Thông tin giới thiệu:</span>
-        <textarea
-          className='textarea textarea-bordered h-32 w-full rounded-3xl text-base'
-          id='candidate-email'
-          placeholder='Nhập thông tin giới thiệu'
-          {...register('description')}
-        />
-      </label>
+      </div>
+      <div>
+        <span className='mb-2 inline-flex font-medium'>Thông tin giới thiệu:</span>
+        {errors.description?.message && <div className='text-error'>{errors.description?.message}</div>}
+        <TextEditor editorState={editorState} setEditorState={setEditorState} />
+      </div>
       <div className='flex flex-col'>
-        <Button loading={useUpdateProfile.isPending}>Lưu lại</Button>
+        <Button loading={useUpdateProfile.isPending} onClick={handleUpdateProfile}>
+          Lưu lại
+        </Button>
       </div>
     </form>
   )

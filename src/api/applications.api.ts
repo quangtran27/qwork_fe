@@ -3,13 +3,15 @@ import { Application, ApplicationDetail, ApplicationStatusEnum } from '@/types/a
 import { axiosPrivate } from './axios-instance'
 
 const applicationsApi = {
-  createApplication: async (application: Application) => {
+  createApplication: async (application: Application, oldCv?: string) => {
     const formData = new FormData()
     formData.append('job_id', application.jobId)
     formData.append('name', application.name)
     formData.append('phone', application.phone)
     formData.append('email', application.email)
-    if (application.cv instanceof FileList && application.cv.length) {
+    if (oldCv) {
+      formData.append('oldCv', oldCv)
+    } else if (application.cv instanceof FileList && application.cv.length) {
       formData.append('cv', application.cv[0])
     }
 

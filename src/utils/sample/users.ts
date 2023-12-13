@@ -1,15 +1,16 @@
 import { User, UserRoles } from '@/types/users.type'
 
-export const emptyUser = {
-  id: '0',
+export const emptyUser: User = {
+  id: '',
   name: '',
   phone: '',
   email: '',
   password: '',
   role: UserRoles.candidate,
+  isActive: false,
 }
 
-export const recruiter: User = {
+export const recruiter = {
   id: '1',
   name: 'Trần Văn Quảng',
   phone: '0336699075',
@@ -18,7 +19,7 @@ export const recruiter: User = {
   role: UserRoles.recruiter,
 }
 
-export const candidate: User = {
+export const candidate = {
   id: '2',
   name: 'Candidate Name',
   phone: '987-654-3210',

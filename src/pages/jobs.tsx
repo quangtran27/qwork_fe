@@ -2,13 +2,11 @@ import addressesApi from '@/api/addresses.api'
 import jobsApi from '@/api/jobs.api'
 import Container from '@/components/Container'
 import Job from '@/components/Job'
+import Loading from '@/components/Loading'
 import Pagination from '@/components/Pagination'
 import SearchBox from '@/components/SearchBox'
 import routes from '@/configs/route.config'
 import { nationwide } from '@/constants/location.constant'
-import { City } from '@/types/addresses.type'
-import { Job as IJob } from '@/types/jobs.type'
-import { emptyResponse } from '@/utils/sample/api.sample'
 import { faBriefcase } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
@@ -22,23 +20,19 @@ export default function Jobs() {
   const page = Number(searchParams.get('page') || '1')
   const city = searchParams.get('city') || '0'
 
-  const {
-    data: { data: jobs, pagination },
-    isFetched,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['jobs', page],
     queryFn: () => jobsApi.getAll({ page: page, city: city }),
-    initialData: emptyResponse<IJob[]>([]),
   })
 
   const { data: citiesRes } = useQuery({
     queryKey: ['all-cities'],
     queryFn: addressesApi.getAllCities,
-    initialData: emptyResponse<City[]>([]),
   })
 
   useEffect(() => {
+    document.title = 'Việc làm - QWork'
+
     isFetched && refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, city, refetch])
@@ -49,12 +43,13 @@ export default function Jobs() {
   }
 
   return (
-    <div className='mt-header pb-4'>
+    <div className='pb-4'>
       <SearchBox
         title='Tìm việc làm nhanh 24h, việc làm mới nhất và nhanh chóng trên toàn quốc'
         body={<></>}
-        placeholder='Tên công việc, vị trí ứng tuyển'
+        placeholder='Tên công việc, vị trí ứng tuyển...'
         searchPath={routes.searchJobs}
+        cities={citiesRes?.data ? [nationwide, ...citiesRes.data] : []}
       />
       <Container>
         <div className='w-full'>
@@ -65,27 +60,34 @@ export default function Jobs() {
                 <h3 className='text-h3'>Tất cả công việc</h3>
               </div>
               <select className='select select-bordered rounded-full' value={city} onChange={handleSelectCity}>
-                <option key={nationwide.code} value={nationwide.code}>
-                  {nationwide.name}
-                </option>
-                {citiesRes.data.map((city) => (
+                {[nationwide, ...(citiesRes?.data || [])].map((city) => (
                   <option key={city.code} value={city.code}>
                     {city.name}
                   </option>
                 ))}
               </select>
             </div>
-            {!jobs.length && <p className='text-center text-base'>Hiện tại chưa có việc làm nào phù hợp</p>}
-            <div className='grid grid-cols-1 gap-6 py-6 lg:grid-cols-3'>
-              {jobs.map((job) => (
-                <Job key={job.id} {...job} />
-              ))}
-            </div>
+            {isLoading ? (
+              <Loading content='Đang tải danh sách công việc' />
+            ) : data?.data.length ? (
+              <div className='grid grid-cols-1 gap-4 py-4 lg:grid-cols-3'>
+                {data.data.map((job) => (
+                  <Job key={job.id} {...job} />
+                ))}
+              </div>
+            ) : (
+              <div className='mt-2 flex flex-col items-center rounded-2xl border bg-white p-8 shadow-sm'>
+                <img className='h-48 w-48' src='/images/none-result.webp' />
+                Rất tiếc, không có công việc phù hợp với yêu cầu của bạn!
+              </div>
+            )}
           </div>
         </div>
-        <div className='mb-2 '>
-          <Pagination {...pagination} />
-        </div>
+        {data?.pagination && (
+          <div className='mb-2 '>
+            <Pagination {...data.pagination} />
+          </div>
+        )}
       </Container>
     </div>
   )

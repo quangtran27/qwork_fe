@@ -9,27 +9,41 @@ import { ApiResponse } from '@/types/api.type'
 import { CandidateProfile, ProfileType, genderOptions } from '@/types/profile.type'
 import { profileToCandidateProfile } from '@/utils/converters/profile.converter'
 import { candidateProfileSchema } from '@/utils/validators/profile.validator'
+import {
+  faBriefcase,
+  faCalendar,
+  faEnvelope,
+  faLocationDot,
+  faPhone,
+  faSave,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { AxiosError } from 'axios'
-import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
+import { MouseEventHandler, RefObject, useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import TextEditor from '../TextEditor'
 
 type UpdateCandidateProfileProps = {
-  handleCloseModal: () => void
+  parentRef: RefObject<HTMLDialogElement>
 }
 
 export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProfileProps) {
   const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
-
   const candidateProfile = { ...profileToCandidateProfile(profile) }
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   const {
     control,
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
   } = useForm({
     mode: 'onSubmit',
     defaultValues: candidateProfile,
@@ -42,8 +56,8 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
       if (response.success) {
         toast.success('Cập nhật thành công')
         dispatch(setProfile({ ...response.data, type: ProfileType.candidate }))
-        props.handleCloseModal()
       }
+      props.parentRef.current?.close()
     },
     onError: (_err) => {
       const axiosError = _err as AxiosError
@@ -52,45 +66,62 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
     },
   })
 
+  const handleUpdateProfile: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setValue('description', JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+    handleSave()
+  }
+
   const handleSave = handleSubmit((_profile) => {
     console.log(_profile)
     useUpdateProfile.mutate(_profile)
   })
 
+  useEffect(() => {
+    try {
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(profile.description))))
+    } catch {}
+  }, [profile.description])
+
   return (
     <form className='mt-4 flex flex-col gap-4' onSubmit={handleSave}>
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-name'>
-        <span>Họ và tên:</span>
+      <label className='space-y-2'>
+        <span className='font-medium'>Họ và tên:</span>
         <TextInput
           className='w-full'
-          id='candidate-name'
-          placeholder='Nhập họ và tên'
+          iconLeft={<FontAwesomeIcon className='text-gray-500' icon={faUser} />}
+          placeholder='Nhập họ và tên......'
           error={!!errors.name}
           errorMessage={errors.name?.message}
           {...register('name')}
         />
       </label>
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-birthday'>
-        <span>Vị trí:</span>
+      <label className='space-y-2'>
+        <span className='font-medium'>Vị trí:</span>
         <TextInput
           className='w-full'
-          id='candidate-birthday'
-          placeholder='Nhập ngày sinh'
+          iconLeft={<FontAwesomeIcon className='text-gray-500' icon={faBriefcase} />}
+          placeholder='Nhập ngày sinh...'
           error={!!errors.position}
           errorMessage={errors.position?.message}
           {...register('position')}
         />
       </label>
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-birthday'>
-        <span>Ngày sinh:</span>
+      <label className='space-y-2'>
+        <span className='font-medium'>Ngày sinh:</span>
         <div className='flex w-full flex-col gap-2 lg:flex-row lg:items-center'>
-          <input
-            className='input input-bordered mr-4 w-full rounded-full lg:w-fit'
-            placeholder='dd-mm-yyyy'
-            type='date'
-            {...register('birthDay')}
-          />
-          <span>(tháng / ngày / năm)</span>
+          <div className='relative'>
+            <span className='absolute inset-y-0 left-0 flex items-center pl-4'>
+              <FontAwesomeIcon className='text-gray-500' icon={faCalendar} />
+            </span>
+            <input
+              className='input input-bordered mr-4 w-full rounded-full pl-10 lg:w-fit'
+              placeholder='dd-mm-yyyy...'
+              type='date'
+              {...register('birthDay')}
+            />
+          </div>
+          <span className='text-gray-500'>(tháng / ngày / năm)</span>
         </div>
       </label>
       <Controller
@@ -98,14 +129,13 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
         control={control}
         render={({ field }) => (
           <>
-            <div className='flex flex-col items-start gap-2'>
-              <span>Giới tính::</span>
+            <div className='space-y-2'>
+              <span className='font-medium'>Giới tính:</span>
               <div className='flex gap-3'>
                 {genderOptions.map((option) => {
                   return (
                     <div key={option.value} className='mr-4 flex items-center'>
                       <input
-                        id={`role-${option.value}`}
                         type='radio'
                         className='h-4 w-4 border-gray-300 bg-gray-100 text-blue-600'
                         {...field}
@@ -124,51 +154,48 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
           </>
         )}
       />
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-address'>
-        <span>Địa chỉ:</span>
+      <label className='space-y-2'>
+        <span className='font-medium'>Địa chỉ:</span>
         <TextInput
           className='w-full'
-          id='candidate-address'
-          placeholder='Nhập địa chỉ'
+          iconLeft={<FontAwesomeIcon className='text-gray-500' icon={faLocationDot} />}
+          placeholder='Nhập địa chỉ...'
           error={!!errors.address}
           errorMessage={errors.address?.message}
           {...register('address')}
         />
       </label>
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-phone'>
-        <span>Số điện thoại:</span>
+      <label className='space-y-2'>
+        <span className='font-medium'>Số điện thoại:</span>
         <TextInput
           className='w-full'
-          id='candidate-phone'
-          placeholder='Nhập số điện thoại'
+          iconLeft={<FontAwesomeIcon icon={faPhone} />}
+          placeholder='Nhập số điện thoại...'
           error={!!errors.phone}
           errorMessage={errors.phone?.message}
           {...register('phone')}
         />
       </label>
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-email'>
-        <span>Email:</span>
+      <label className='space-y-2'>
+        <span className='font-medium'>Email:</span>
         <TextInput
           className='w-full'
-          id='candidate-email'
-          placeholder='Nhập email'
+          iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
+          placeholder='Nhập email...'
           error={!!errors.email}
           errorMessage={errors.email?.message}
           {...register('email')}
         />
       </label>
-      <label className='flex flex-col items-start gap-2' htmlFor='candidate-email'>
-        <span>Thông tin giới thiệu:</span>
-        <textarea
-          className='textarea textarea-bordered flex h-32 w-full items-start rounded-3xl text-base'
-          id='candidate-email'
-          placeholder='Nhập thông tin giới thiệu'
-          {...register('description')}
-        />
-      </label>
+      <div>
+        <span className='mb-2 inline-flex font-medium'>Thông tin giới thiệu:</span>
+        {errors.description?.message && <div className='text-error'>{errors.description?.message}</div>}
+        <TextEditor editorState={editorState} setEditorState={setEditorState} />
+      </div>
       <div className='flex flex-col'>
         <span></span>
-        <Button className='w-full' loading={useUpdateProfile.isPending}>
+        <Button className='w-full' loading={useUpdateProfile.isPending} onClick={handleUpdateProfile}>
+          <FontAwesomeIcon icon={faSave} />
           Lưu lại
         </Button>
       </div>

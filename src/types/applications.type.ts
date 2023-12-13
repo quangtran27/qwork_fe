@@ -28,6 +28,7 @@ export type ApplicationDetail = {
   candidateAvatar: string
   candidateUserId: string
   candidateName: string
+  candidatePosition: string
   email: string
   phone: string
   cv: string

@@ -7,22 +7,19 @@ import { useAppDispatch } from '@/hook/useAppDispatch'
 import { setCredential } from '@/redux/reducers/auth-slice'
 import { ApiResponse } from '@/types/api.type'
 import { UserRoles } from '@/types/users.type'
-import { LoginUserSchema, loginUserSchema } from '@/utils/validators/user'
-import { faChevronLeft, faEnvelope, faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons'
+import { LoginUserSchema, loginUserSchema } from '@/utils/validators/user.validator'
+import { faArrowRight, faChevronLeft, faEnvelope, faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function Login() {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const next = searchParams.get('next')
   const [showPassword, setShowPassword] = useState(false)
 
   const {
@@ -41,7 +38,6 @@ export default function Login() {
     onSuccess: (response) => {
       if (response.success) {
         dispatch(setCredential(response.data))
-        navigate(next ?? routes.home)
       } else {
         toast.error(`Đăng nhập không thành công: ${response.message}`)
       }
@@ -74,14 +70,14 @@ export default function Login() {
           <div className='my-2'>
             <TextInput
               iconLeft={<FontAwesomeIcon icon={faEnvelope} />}
-              placeholder='Nhập địa chỉ email'
+              placeholder='nguyenvana@gmail.com'
               error={!!errors.email}
               errorMessage={errors.email?.message}
               {...register('email')}
             />
             <TextInput
               className='mt-3'
-              placeholder='Nhập mật khẩu'
+              placeholder='••••••••'
               type={showPassword ? 'text' : 'password'}
               iconLeft={<FontAwesomeIcon icon={faLock} />}
               iconRight={
@@ -99,23 +95,21 @@ export default function Login() {
               render={({ field }) => (
                 <>
                   <div className='flex px-4'>
-                    {roleOptions.map((option) => {
-                      return (
-                        <div key={option.value} className='mr-4 mt-3 flex items-center'>
-                          <input
-                            id={`role-${option.value}`}
-                            type='radio'
-                            className='h-4 w-4 border-gray-300 bg-gray-100 text-blue-600'
-                            {...field}
-                            checked={option.value === field.value}
-                            value={option.value}
-                          />
-                          <label htmlFor={`role-${option.value}`} className='ml-2'>
-                            {option.display}
-                          </label>
-                        </div>
-                      )
-                    })}
+                    {roleOptions.map((option) => (
+                      <div key={option.value} className='mr-4 mt-3 flex items-center'>
+                        <input
+                          id={`role-${option.value}`}
+                          type='radio'
+                          className='h-4 w-4 border-gray-300 bg-gray-100 text-blue-600'
+                          {...field}
+                          checked={option.value === field.value}
+                          value={option.value}
+                        />
+                        <label htmlFor={`role-${option.value}`} className='ml-2'>
+                          {option.display}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                   {errors.role?.message && <div className='px-4 text-error'>{errors.role?.message}</div>}
                 </>
@@ -123,19 +117,24 @@ export default function Login() {
             />
           </div>
           <div className='mb-2 block py-2 text-right'>
-            <Link to={'/forgot-password'} className='text-secondary'>
+            <Link to={routes.forgotPassword} className='text-secondary'>
               Quên mật khẩu
             </Link>
           </div>
           <Button loading={loginMutation.isPending} className='w-full'>
             Đăng nhập
           </Button>
-          <p className='text-center'>
+          <p className='mb-2 mt-4 text-center'>
             Chưa có tài khoản?{' '}
-            <Link className='text-secondary' to={routes.register}>
+            <Link to={routes.register} className='text-secondary'>
               Đăng ký
             </Link>{' '}
             ngay
+          </p>
+          <p className='my-0 text-center'>
+            <Link to={routes.verifyEmail} className='link-hover flex items-center justify-center gap-2'>
+              Xác thực tài khoản <FontAwesomeIcon icon={faArrowRight} />
+            </Link>
           </p>
         </form>
         <Link to={routes.home} className='link-hover link mt-2 text-base'>

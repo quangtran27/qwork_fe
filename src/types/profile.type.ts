@@ -1,3 +1,5 @@
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
+
 export enum ProfileType {
   candidate = 'candidate',
   recruiter = 'recruiter',
@@ -59,4 +61,12 @@ export type RecruiterProfile = {
   phone: string
   email: string
   address: string
+}
+
+export type ProfileTab = {
+  label: string
+  value: string
+  icon: IconDefinition
+  isPrivate: boolean
+  tab: () => JSX.Element
 }

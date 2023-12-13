@@ -16,35 +16,35 @@ export default function CandidateDescription() {
             <FontAwesomeIcon icon={faCalendarDays} />
             Ngày sinh:
           </div>
-          <div>{birthDay}</div>
+          <div className='ml-3'>{birthDay}</div>
         </div>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>
             <FontAwesomeIcon icon={faChildren} />
             Giới tính:
           </div>
-          <div>{profile.gender === 'male' ? 'Nam' : 'Nữ'}</div>
+          <div className='ml-3'>{profile.gender === 'male' ? 'Nam' : 'Nữ'}</div>
         </div>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>
             <FontAwesomeIcon icon={faLocationDot} />
             Địa chỉ:
           </div>
-          <div> {profile.address}</div>
+          <div className='ml-3'>{profile.address}</div>
         </div>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>
             <FontAwesomeIcon icon={faPhone} />
             Số điện thoại:
           </div>
-          <div> {profile.phone}</div>
+          <div className='ml-3'>{profile.phone}</div>
         </div>
         <div className='flex flex-col gap-2'>
           <div className='text-h4 flex items-center gap-2 text-primary'>
             <FontAwesomeIcon icon={faEnvelope} />
             Email:
           </div>
-          <div> {profile.email}</div>
+          <div className='ml-3'>{profile.email}</div>
         </div>
       </div>
     </div>

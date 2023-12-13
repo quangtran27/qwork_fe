@@ -1,15 +1,13 @@
 import { LoginData } from '@/types/api.type'
-import { UserRoles } from '@/types/users.type'
+import { emptyUser } from '@/utils/sample/users'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export type AuthState = LoginData
 
 const initialState: AuthState = {
-  id: '',
-  role: UserRoles.guest,
   token: '',
-  name: '',
+  user: emptyUser,
 }
 
 const authSlice = createSlice({
@@ -17,16 +15,26 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredential: (state, action: PayloadAction<AuthState>) => {
-      state.id = action.payload.id
-      state.name = action.payload.name
-      state.role = action.payload.role
-      state.token = action.payload.token
+      const { token, user } = { ...action.payload }
+      state.token = token
+      state.user.id = user.id
+      state.user.name = user.name
+      state.user.phone = user.phone
+      state.user.email = user.email
+      state.user.password = user.password
+      state.user.role = user.role
+      state.user.isActive = user.isActive
     },
     clearCredential: (state) => {
-      state.id = initialState.id
-      state.name = initialState.name
-      state.role = initialState.role
-      state.token = initialState.id
+      const { user, token } = { ...initialState }
+      state.token = token
+      state.user.id = user.id
+      state.user.name = user.name
+      state.user.phone = user.phone
+      state.user.email = user.email
+      state.user.password = user.password
+      state.user.role = user.role
+      state.user.isActive = user.isActive
     },
   },
 })
