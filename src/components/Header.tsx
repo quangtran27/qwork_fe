@@ -1,5 +1,5 @@
 import routes from '@/configs/route.config'
-import { menuItems } from '@/constants/header.constant'
+import { menuItems, recruiterMenuItems } from '@/constants/header.constant'
 import { candidateProfileTabs, recruiterProfileTabs } from '@/constants/profile.constant'
 import { useAppSelector } from '@/hook/useAppSelector'
 import useLogout from '@/hook/useLogout'
@@ -35,7 +35,7 @@ export default function Header() {
                   <img src='/images/logo.png' alt='qwork logo' />
                 </figure>
               </Link>
-              {menuItems.map((item, index) => (
+              {(auth.user.role === UserRoles.recruiter ? recruiterMenuItems : menuItems).map((item, index) => (
                 <NavLink
                   key={index}
                   to={item.to}
@@ -51,7 +51,7 @@ export default function Header() {
               </label>
             </div>
             {auth.user.id ? (
-              <div className='dropdown dropdown-end hidden lg:block'>
+              <div className='dropdown-end dropdown hidden lg:block'>
                 <label tabIndex={0} className='btn btn-ghost flex flex-nowrap rounded-full font-bold'>
                   <span className='whitespace-nowrap'>{auth.user.name}</span>
                   <FontAwesomeIcon icon={faChevronDown} />

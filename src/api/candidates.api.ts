@@ -3,6 +3,8 @@ import { ApiResponse } from '@/types/api.type'
 import { CandidateProfile, Profile } from '@/types/profile.type'
 
 const candidatesApi = {
+  getAll: async (option?: object) =>
+    (await axiosPrivate.get<ApiResponse<Profile[]>>('candidates/', { params: { ...option } })).data,
   updateProfile: async (id: string, profile: CandidateProfile) =>
     (await axiosPrivate.put<ApiResponse<Profile>>(`candidates/${id}`, profile)).data,
   updateAvatar: async (id: string, avatar: File) => {

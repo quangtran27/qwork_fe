@@ -19,8 +19,8 @@ export default function PersistLogin() {
       }
     }
 
-    !isLoading && !token ? verifyRefreshToken() : setLoading(false)
-  }, [isLoading, refresh, token])
+    !token ? verifyRefreshToken() : setLoading(false)
+  }, [token, refresh])
 
   return isLoading ? <Loading /> : <Outlet />
 }

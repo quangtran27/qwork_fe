@@ -5,8 +5,6 @@ import Pagination from '@/components/Pagination'
 import Recruiter from '@/components/Recruiter'
 import SearchBox from '@/components/SearchBox'
 import routes from '@/configs/route.config'
-import { Profile } from '@/types/profile.type'
-import { emptyResponse } from '@/utils/sample/api.sample'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -19,13 +17,12 @@ export default function SearchRecruiters() {
   const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['recruiters', keyword, page],
     queryFn: () => recruitersApi.getAll({ keyword: keyword, page: page }),
-    initialData: emptyResponse<Profile[]>([]),
   })
 
   const { data: outstandingRecruiterRes, isLoading: isLoadingOutstandingRecruiters } = useQuery({
     queryKey: ['recruiters', 'outstanding'],
     queryFn: recruitersApi.getOutstandingRecruiters,
-    enabled: isFetched && !data.data.length,
+    enabled: isFetched && !data?.data.length,
   })
 
   useEffect(() => {

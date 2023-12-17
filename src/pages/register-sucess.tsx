@@ -43,6 +43,10 @@ export default function RegisterSuccess() {
     }
   }, [wait])
 
+  useEffect(() => {
+    document.title = 'QWork - Đăng ký tài khoản thành công'
+  }, [])
+
   return (
     <main className='relative z-20 flex h-screen w-screen items-center justify-center bg-login'>
       <div className='w-full max-w-xl'>

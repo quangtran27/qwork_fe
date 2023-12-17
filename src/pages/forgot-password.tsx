@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -23,6 +24,10 @@ export default function ForgotPassword() {
     mode: 'onSubmit',
     resolver: yupResolver(emailSchema),
   })
+
+  useEffect(() => {
+    document.title = 'QWork - Quên mật khẩu'
+  }, [])
 
   const requestResetPasswordMutation = useMutation({
     mutationFn: (data: EmailSchema) => authApi.requestResetPasswordToken(data),

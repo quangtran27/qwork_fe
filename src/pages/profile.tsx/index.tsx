@@ -21,6 +21,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (data?.data) {
+      document.title = `${data.data.name} - Trang cá nhân`
       dispatch(setProfile(data.data))
     }
   }, [data, dispatch])

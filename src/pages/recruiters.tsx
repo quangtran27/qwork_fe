@@ -21,7 +21,7 @@ export default function Recruiters() {
   })
 
   useEffect(() => {
-    document.title = 'Nhà tuyển dụng - QWork'
+    document.title = 'QWork - Nhà tuyển dụng'
 
     isFetched && refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,7 +49,7 @@ export default function Recruiters() {
               </div>
             </div>
             {isLoading ? (
-              <Loading />
+              <Loading content='Đang tải danh sách nhà tuyển dụng' />
             ) : data?.data.length ? (
               <div className='grid grid-cols-1 gap-4 py-4 lg:grid-cols-3'>
                 {data.data.map((recruiter) => (

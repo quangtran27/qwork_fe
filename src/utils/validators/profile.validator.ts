@@ -1,4 +1,4 @@
-import { object, string } from 'yup'
+import { boolean, object, string } from 'yup'
 
 export const candidateProfileSchema = object({
   name: string().required(),
@@ -9,6 +9,7 @@ export const candidateProfileSchema = object({
   gender: string().required(),
   birthDay: string().required(),
   email: string().required(),
+  available: boolean().required(),
 })
 
 export const recruiterProfileSchema = object({

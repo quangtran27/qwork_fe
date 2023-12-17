@@ -51,6 +51,10 @@ export default function Login() {
     setValue('role', UserRoles.candidate)
   }, [setValue])
 
+  useEffect(() => {
+    document.title = 'QWork - Đăng nhập'
+  }, [])
+
   const handleLogin = handleSubmit((loginUser) => {
     loginMutation.mutate(loginUser)
   })
@@ -133,7 +137,7 @@ export default function Login() {
           </p>
           <p className='my-0 text-center'>
             <Link to={routes.verifyEmail} className='link-hover flex items-center justify-center gap-2'>
-              Xác thực tài khoản <FontAwesomeIcon icon={faArrowRight} />
+              <FontAwesomeIcon icon={faArrowRight} />
             </Link>
           </p>
         </form>

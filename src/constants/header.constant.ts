@@ -11,3 +11,10 @@ export const menuItems: MenuItem[] = [
     to: routes.recruiters,
   },
 ]
+
+export const recruiterMenuItems: MenuItem[] = [
+  {
+    label: 'Ứng cử viên',
+    to: routes.candidate,
+  },
+]

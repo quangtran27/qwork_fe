@@ -8,10 +8,15 @@ import { faHome } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 export default function ActiveUser() {
   const { email, token } = useParams()
+
+  useEffect(() => {
+    document.title = 'QWork - Kích hoạt tài khoản'
+  }, [])
 
   const { data, error, isLoading, isSuccess, isError } = useQuery({
     queryKey: [token],

@@ -57,7 +57,7 @@ export default function SearchBox({
   }, [])
 
   const handleSearch = () => {
-    search && dispatch(addHistory({ key: searchPath, value: search }))
+    !!search && dispatch(addHistory({ key: searchPath, value: search }))
     navigate({
       pathname: searchPath,
       search: `?keyword=${search}${cities.length ? '&city=' + selectedCity : ''}`,

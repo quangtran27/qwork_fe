@@ -114,6 +114,12 @@ export default function JobDetail() {
     }
   }, [data, saveJobRes])
 
+  useEffect(() => {
+    if (data) {
+      document.title = `Tuyển dụng ${data.data.name}`
+    }
+  }, [data])
+
   if (isError) return <NotFound />
 
   return (

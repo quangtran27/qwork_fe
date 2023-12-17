@@ -42,6 +42,7 @@ export type Profile = {
   gender?: string
   birthDay?: string
   email: string
+  available?: boolean
 }
 
 export type CandidateProfile = {
@@ -53,6 +54,7 @@ export type CandidateProfile = {
   gender: string
   birthDay: string
   email: string
+  available: boolean
 }
 
 export type RecruiterProfile = {

@@ -20,6 +20,10 @@ export default function Account() {
   const auth = useAppSelector(selectAuth)
   const dispatch = useAppDispatch()
 
+  useEffect(() => {
+    document.title = 'QWork - Quản lý tài khoản'
+  }, [])
+
   const {
     formState: { errors },
     handleSubmit,

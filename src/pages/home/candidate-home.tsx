@@ -3,7 +3,7 @@ import OutstandingRecruiters from '@/components/OutstandingRecuiters'
 import SearchBox from '@/components/SearchBox'
 import routes from '@/configs/route.config'
 
-export default function Home() {
+export default function CandidateHome() {
   return (
     <>
       <SearchBox

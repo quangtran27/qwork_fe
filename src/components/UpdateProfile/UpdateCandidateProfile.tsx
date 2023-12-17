@@ -85,6 +85,15 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
 
   return (
     <form className='mt-4 flex flex-col gap-4' onSubmit={handleSave}>
+      <div>
+        <div className='flex items-center gap-4'>
+          <span className='font-medium'>Bật tìm việc:</span>
+          <input type='checkbox' className='toggle toggle-primary' {...register('available')} />
+        </div>
+        <p className='my-3 text-sm text-slate-500'>
+          Khi bật tìm việc, các nhà tuyển dụng sẽ có thể tìm kiếm và xem hồ sơ cá nhân của bạn
+        </p>
+      </div>
       <label className='space-y-2'>
         <span className='font-medium'>Họ và tên:</span>
         <TextInput

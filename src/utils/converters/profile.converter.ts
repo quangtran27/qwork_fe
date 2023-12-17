@@ -10,6 +10,7 @@ export const profileToCandidateProfile = (profile: Profile): CandidateProfile =>
     gender: profile.gender || '',
     birthDay: profile.birthDay || '',
     email: profile.email,
+    available: profile.available || false,
   }
 }
 
