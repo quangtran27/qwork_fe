@@ -137,6 +137,7 @@ export default function Login() {
           </p>
           <p className='my-0 text-center'>
             <Link to={routes.verifyEmail} className='link-hover flex items-center justify-center gap-2'>
+              Kích hoạt tài khoản
               <FontAwesomeIcon icon={faArrowRight} />
             </Link>
           </p>
