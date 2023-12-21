@@ -73,10 +73,10 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
 
     useEffect(() => {
       mode === 'update' && setValue('expired', job.expired.split('/').reverse().join('-'))
-    }, [job.expired, mode, setValue])
+    }, [job.expired, mode, setValue, job])
 
     return (
-      <dialog id='my_modal_2' className='modal' ref={ref}>
+      <dialog className='modal' ref={ref}>
         <div className='modal-box max-w-screen-lg'>
           <h3 className='text-h3'>{mode === 'create' ? 'Đăng tin tuyển dụng mới' : 'Cập nhật tin tuyển dụng'}</h3>
           <form className='mt-4 flex flex-col gap-4' ref={formRef} onSubmit={handleSave}>

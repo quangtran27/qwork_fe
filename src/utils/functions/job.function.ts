@@ -6,7 +6,7 @@ export function countExpired(expired: string) {
 
   const [day, month, year] = expired.split('/').map(Number)
   if (datetimeValidator.isDateExpired(day, month, year)) {
-    dateDisplay = 'Đã hết hạn'
+    dateDisplay = 'Tin tuyển dụng đã hết hạn'
     dateClass = 'text-red-600'
   } else {
     const currentDate = new Date()
