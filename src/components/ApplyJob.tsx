@@ -134,10 +134,14 @@ const ApplyJob = forwardRef<HTMLDialogElement, ApplyJobProps>(({ ...props }, ref
             </div>
             <div
               className={`${
-                useOldCV ? 'border-primary bg-blue-100' : ' bg-gray-100'
-              } flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors`}
+                !props.CVs.at(0)
+                  ? 'cursor-not-allowed brightness-90'
+                  : useOldCV
+                  ? 'border-primary bg-blue-100'
+                  : ' bg-gray-100'
+              } flex items-center gap-3 rounded-xl border p-3 transition-colors`}
               onClick={() => {
-                setUseOldCV(true)
+                props.CVs.at(0) && setUseOldCV(true)
               }}
             >
               <input type='radio' className='cursor-pointer' checked={useOldCV} readOnly />

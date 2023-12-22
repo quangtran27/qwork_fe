@@ -6,12 +6,11 @@ import { selectProfile } from '@/redux/reducers/auth-slice'
 import { setProfile } from '@/redux/reducers/profile-slice'
 import { ApiResponse } from '@/types/api.type'
 import { ProfileType } from '@/types/profile.type'
-import { handleImageError } from '@/utils/handlers/error-image.handler'
 import { faImage, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { ChangeEventHandler, RefObject, forwardRef, useRef, useState } from 'react'
+import { ChangeEventHandler, RefObject, forwardRef, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Button from './Button'
 
@@ -55,6 +54,10 @@ const UpdateAvatar = forwardRef<HTMLDialogElement>(({}, ref) => {
     },
   })
 
+  useEffect(() => {
+    setPreviewImage(profile.avatar)
+  }, [profile])
+
   return (
     <dialog id='update-avatar-modal' className='modal' ref={ref}>
       <div className='modal-box max-w-screen-md'>
@@ -62,11 +65,7 @@ const UpdateAvatar = forwardRef<HTMLDialogElement>(({}, ref) => {
         <div className='mt-4 flex flex-col items-center justify-center gap-4'>
           <input className='hidden' type='file' accept='image/*' ref={inputRef} onChange={handleChangeImage} />
           <figure className='relative h-80 w-80 overflow-hidden rounded-full'>
-            <img
-              className='absolute h-full w-full object-cover'
-              src={previewImage?.toString()}
-              onError={handleImageError}
-            />
+            <img className='absolute h-full w-full object-cover' src={previewImage?.toString()} />
           </figure>
           <Button
             color='secondary'

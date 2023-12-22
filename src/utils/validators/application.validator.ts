@@ -1,4 +1,5 @@
-import { mixed, object, string } from 'yup'
+import { ApplicationStatusEnum } from '@/types/applications.type'
+import { InferType, mixed, number, object, string } from 'yup'
 
 export const applicationSchema = object().shape({
   jobId: string().required('Job ID is required'),
@@ -14,3 +15,11 @@ export const applicationSchema = object().shape({
     return true
   }),
 })
+
+export const reviewApplicationSchema = object({
+  note: string().required('Vui lòng nhập đánh giá để gửi cho ứng cử viên'),
+  status: number()
+    .required('Vui lòng đánh giá đơn ứng tuyển')
+    .oneOf([ApplicationStatusEnum.Is_Approved, ApplicationStatusEnum.Is_Rejected]),
+})
+export type ReviewApplicationSchema = InferType<typeof reviewApplicationSchema>

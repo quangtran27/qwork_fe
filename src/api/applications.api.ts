@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/api.type'
-import { Application, ApplicationDetail, ApplicationStatusEnum } from '@/types/applications.type'
+import { Application, ApplicationDetail } from '@/types/applications.type'
 import { axiosPrivate } from './axios-instance'
 
 const applicationsApi = {
@@ -23,12 +23,8 @@ const applicationsApi = {
       })
     ).data
   },
-  updateApplicationStatus: async (id: string, status: ApplicationStatusEnum) =>
-    (
-      await axiosPrivate.put<ApiResponse<ApplicationDetail>>(`/applications/${id}`, {
-        status: status,
-      })
-    ).data,
+  updateApplicationStatus: async (id: string, data?: object) =>
+    (await axiosPrivate.put<ApiResponse<ApplicationDetail>>(`/applications/${id}`, data)).data,
 }
 
 export default applicationsApi

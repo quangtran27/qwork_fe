@@ -42,7 +42,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function Button({
   children,
   className = '',
-  color = 'primary',
+  color = 'default',
   disabled,
   loading = false,
   size = 'md',

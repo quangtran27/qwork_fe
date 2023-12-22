@@ -17,6 +17,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import Button from './Button'
+import datetimeValidator from '@/utils/validators/datetime.validator'
 
 type JobInfoProps = Job & {
   isSaved?: boolean
@@ -28,6 +29,8 @@ type JobInfoProps = Job & {
 
 export default function JobInfo({ ...props }: JobInfoProps) {
   const auth = useAppSelector(selectAuth)
+  const [day, month, year] = props.expired.split('/').map(Number)
+  const isJobExpired = datetimeValidator.isDateExpired(day, month, year)
   const [dateDisplay, dateClass] = countExpired(props.expired)
 
   return (
@@ -97,6 +100,7 @@ export default function JobInfo({ ...props }: JobInfoProps) {
                 onClick={() => {
                   props.handleApply && props.handleApply()
                 }}
+                disabled={isJobExpired}
               >
                 {props.isApplied ? (
                   <>

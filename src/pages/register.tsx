@@ -149,7 +149,7 @@ export default function Register() {
               )}
             />
           </div>
-          <Button loading={registerMutation.isPending} className='w-full'>
+          <Button color='primary' loading={registerMutation.isPending} className='w-full'>
             Đăng ký
           </Button>
           <p className='text-center'>

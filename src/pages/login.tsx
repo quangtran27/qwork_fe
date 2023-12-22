@@ -125,7 +125,7 @@ export default function Login() {
               Quên mật khẩu
             </Link>
           </div>
-          <Button loading={loginMutation.isPending} className='w-full'>
+          <Button color='primary' loading={loginMutation.isPending} className='w-full'>
             Đăng nhập
           </Button>
           <p className='mb-2 mt-4 text-center'>

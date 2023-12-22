@@ -33,4 +33,5 @@ export type ApplicationDetail = {
   phone: string
   cv: string
   status: ApplicationStatusEnum
+  note: string
 }

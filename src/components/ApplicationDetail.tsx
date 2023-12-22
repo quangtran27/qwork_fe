@@ -1,35 +1,56 @@
 import routes from '@/configs/route.config'
 import { useAppSelector } from '@/hook/useAppSelector'
-import { selectProfile } from '@/redux/reducers/auth-slice'
+import { selectAuth, selectProfile } from '@/redux/reducers/auth-slice'
 import { ApiResponse } from '@/types/api.type'
 import { ApplicationStatusEnum, ApplicationDetail as IApplicationDetail } from '@/types/applications.type'
+import { UserRoles } from '@/types/users.type'
 import { applicationStatusToString } from '@/utils/converters/application.converter'
-import { faCheck, faExclamationCircle, faEye } from '@fortawesome/free-solid-svg-icons'
+import { ReviewApplicationSchema, reviewApplicationSchema } from '@/utils/validators/application.validator'
+import { faCheck, faEye, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { UseMutationResult } from '@tanstack/react-query'
 import { forwardRef } from 'react'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import Button from './Button'
 import Card from './Card'
+import { toast } from 'react-toastify'
 
 type ApplicationDetailProps = IApplicationDetail & {
-  useUpdateApplication: UseMutationResult<ApiResponse<IApplicationDetail>, unknown, ApplicationStatusEnum, unknown>
+  updateApplicationMutation: UseMutationResult<ApiResponse<IApplicationDetail>, Error, object | undefined, unknown>
 }
 
 const ApplicationDetail = forwardRef<HTMLDialogElement, ApplicationDetailProps>(({ ...props }, ref) => {
   const profile = useAppSelector(selectProfile)
+  const auth = useAppSelector(selectAuth)
   const [statusContent, statusClass] = applicationStatusToString(props.status)
 
-  const handleUpdateApplication = (to: ApplicationStatusEnum) => {
-    props.useUpdateApplication.mutate(to)
-  }
+  const {
+    formState: { errors },
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+  } = useForm<ReviewApplicationSchema>({
+    mode: 'onSubmit',
+    resolver: yupResolver(reviewApplicationSchema),
+  })
+
+  const handleSubmitForm = handleSubmit((data) => {
+    props.updateApplicationMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success('Cập nhật thành công!')
+      },
+    })
+  })
 
   const handleDownloadCV = async () => {
     try {
       const downloadLink = document.createElement('a')
       downloadLink.href = props.cv
       downloadLink.target = '_blank'
-      downloadLink.download = `CV ${props.jobName} - ${props.name}.${props.cv.split('.').pop()}` // Replace with the desired file name
+      downloadLink.download = `CV ${props.jobName} - ${props.name}.${props.cv.split('.').pop()}`
       downloadLink.click()
     } catch (error) {
       console.error('Error downloading file:', error)
@@ -50,32 +71,6 @@ const ApplicationDetail = forwardRef<HTMLDialogElement, ApplicationDetailProps>(
               <div className='text-gray-500'>Cập nhật: {props.updated}</div>
             </div>
           </div>
-          {profile.userId === props.recruiterUserId && props.status === ApplicationStatusEnum.Is_Considering && (
-            <div className='flex items-center'>
-              Đánh giá:
-              <div className='ml-2 flex gap-2'>
-                <Button
-                  size='sm'
-                  variant='outline'
-                  color='secondary'
-                  onClick={() => {
-                    handleUpdateApplication(ApplicationStatusEnum.Is_Rejected)
-                  }}
-                >
-                  Hồ sơ chưa phù hợp <FontAwesomeIcon icon={faExclamationCircle} />
-                </Button>
-                <Button
-                  size='sm'
-                  variant='outline'
-                  onClick={() => {
-                    handleUpdateApplication(ApplicationStatusEnum.Is_Approved)
-                  }}
-                >
-                  Hồ sơ phù hợp <FontAwesomeIcon icon={faCheck} />
-                </Button>
-              </div>
-            </div>
-          )}
           <div className='grid grid-cols-4 gap-4'>
             <div className='col-span-3'>
               <div>
@@ -117,8 +112,7 @@ const ApplicationDetail = forwardRef<HTMLDialogElement, ApplicationDetailProps>(
                   </div>
                 </div>
               </Card>
-              <div className='divider'></div>
-              <Card>
+              <Card size='sm'>
                 <div className='space-y-2'>
                   <div className='space-x-2'>
                     <span className='font-semibold'>Công việc:</span>
@@ -126,18 +120,81 @@ const ApplicationDetail = forwardRef<HTMLDialogElement, ApplicationDetailProps>(
                       {props.jobName}
                     </Link>
                   </div>
-                  <div className='space-x-2'>
-                    <span className='font-semibold'>Từ:</span>
-                    <Link className='link-hover' to={routes.jobDetail.replace(':id', props.recruiterName)}>
-                      {props.recruiterName}
-                    </Link>
-                  </div>
+                  {auth.user.role === UserRoles.candidate && (
+                    <div className='space-x-2'>
+                      <span className='font-semibold'>Từ:</span>
+                      <Link className='link-hover' to={routes.jobDetail.replace(':id', props.recruiterName)}>
+                        {props.recruiterName}
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </Card>
-              <div className='divider'></div>
-              <Button variant='outline' className='w-full' onClick={handleDownloadCV}>
+              <Button variant='outline' className='w-full' color='primary' onClick={handleDownloadCV}>
                 Xem CV Gốc <FontAwesomeIcon icon={faEye} />
               </Button>
+              {profile.userId === props.recruiterUserId && props.status === ApplicationStatusEnum.Is_Considering && (
+                <>
+                  <div className='divider'></div>
+                  <form className='space-y-2' onSubmit={handleSubmitForm}>
+                    <h3 className='font-semibold'>Đánh giá:</h3>
+                    <div className='ml-2 flex flex-wrap justify-start gap-2'>
+                      <Button
+                        size='sm'
+                        color={getValues('status') === ApplicationStatusEnum.Is_Approved ? 'success' : 'default'}
+                        onClick={() => {
+                          setValue('status', ApplicationStatusEnum.Is_Approved)
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                        Hồ sơ phù hợp
+                      </Button>
+                      <Button
+                        size='sm'
+                        color={getValues('status') === ApplicationStatusEnum.Is_Rejected ? 'error' : 'default'}
+                        onClick={() => {
+                          setValue('status', ApplicationStatusEnum.Is_Rejected)
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTimes} />
+                        Hồ sơ chưa phù hợp
+                      </Button>
+                    </div>
+                    {errors.status && <div className='text-sm text-error'>{errors.status.message}</div>}
+                    <div className='mt-2'>
+                      <div className='mb-1'>
+                        Ghi chú <span className='italic text-gray-500'>(Sẽ được gửi cho ứng cử viên)</span>:
+                      </div>
+                      <textarea
+                        className='textarea textarea-bordered w-full rounded-xl'
+                        placeholder='Nhập đánh giá'
+                        {...register('note')}
+                      />
+                      {errors.note && <div className='text-sm text-error'>{errors.note.message}</div>}
+                    </div>
+                    <Button className='w-full' color='primary'>
+                      Gửi đánh giá
+                    </Button>
+                  </form>
+                </>
+              )}
+              {auth.user.role === UserRoles.candidate && !!props.note && (
+                <>
+                  <div>Nhà tuyển dụng đã viết: </div>
+                  <blockquote className='font-semibold italic text-gray-900'>
+                    <svg
+                      className='mb-4 h-6 w-6 text-gray-400'
+                      aria-hidden='true'
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='currentColor'
+                      viewBox='0 0 18 14'
+                    >
+                      <path d='M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z' />
+                    </svg>
+                    <p>{props.note}</p>
+                  </blockquote>
+                </>
+              )}
             </div>
           </div>
         </div>

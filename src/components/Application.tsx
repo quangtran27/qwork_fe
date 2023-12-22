@@ -22,8 +22,8 @@ export default function Application({ ...props }: ApplicationProps) {
   const [statusContent, statusClass] = applicationStatusToString(status)
   const detailRef = useRef<HTMLDialogElement>(null)
 
-  const useUpdateApplication = useMutation({
-    mutationFn: (status: ApplicationStatusEnum) => applicationsApi.updateApplicationStatus(props.id, status),
+  const updateApplicationMutation = useMutation({
+    mutationFn: (data?: object) => applicationsApi.updateApplicationStatus(props.id, data),
     onSuccess: (response) => {
       setStatus(response.data.status)
     },
@@ -33,12 +33,15 @@ export default function Application({ ...props }: ApplicationProps) {
   })
 
   const handleReviewApplication = async () => {
-    if (status === ApplicationStatusEnum.Sent)
-      useUpdateApplication.mutate(ApplicationStatusEnum.Is_Considering, {
-        onSuccess: (response) => {
-          setStatus(response.data.status)
+    if (status === ApplicationStatusEnum.Sent && auth.user.role === UserRoles.recruiter)
+      updateApplicationMutation.mutate(
+        { status: ApplicationStatusEnum.Is_Considering },
+        {
+          onSuccess: (response) => {
+            setStatus(response.data.status)
+          },
         },
-      })
+      )
 
     detailRef.current?.show()
   }
@@ -125,7 +128,12 @@ export default function Application({ ...props }: ApplicationProps) {
           </div>
         </Card>
       )}
-      <ApplicationDetail {...props} status={status} useUpdateApplication={useUpdateApplication} ref={detailRef} />
+      <ApplicationDetail
+        {...props}
+        status={status}
+        updateApplicationMutation={updateApplicationMutation}
+        ref={detailRef}
+      />
     </>
   )
 }
