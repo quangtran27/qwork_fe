@@ -179,7 +179,7 @@ const ApplyJob = forwardRef<HTMLDialogElement, ApplyJobProps>(({ ...props }, ref
             </div>
             {!useOldCV && errors.cv?.message && <div className='text-error'>{errors.cv?.message}</div>}
           </div>
-          <Button loading={useCreateApplication.isPending} className='w-full' onClick={handleApplyJob}>
+          <Button loading={useCreateApplication.isPending} color='primary' className='w-full' onClick={handleApplyJob}>
             <FontAwesomeIcon icon={faPaperPlane} />
             Ứng tuyển
           </Button>

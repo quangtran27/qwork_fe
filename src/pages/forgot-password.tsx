@@ -68,7 +68,7 @@ export default function ForgotPassword() {
                   {...register('email')}
                 />
               </div>
-              <Button loading={requestResetPasswordMutation.isPending} className='w-full'>
+              <Button loading={requestResetPasswordMutation.isPending} color='primary' className='w-full'>
                 {requestResetPasswordMutation.isSuccess ? (
                   <>
                     <FontAwesomeIcon icon={faRedo} />

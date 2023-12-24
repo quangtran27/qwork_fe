@@ -63,7 +63,7 @@ export default function VerifyEmail() {
                   {...register('email')}
                 />
               </div>
-              <Button loading={sendActivateEmailMutation.isPending} className='w-full'>
+              <Button loading={sendActivateEmailMutation.isPending} color='primary' className='w-full'>
                 {sendActivateEmailMutation.isSuccess ? (
                   <>
                     <FontAwesomeIcon icon={faRedo} />

@@ -203,7 +203,7 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
       </div>
       <div className='flex flex-col'>
         <span></span>
-        <Button className='w-full' loading={useUpdateProfile.isPending} onClick={handleUpdateProfile}>
+        <Button className='w-full' color='primary' loading={useUpdateProfile.isPending} onClick={handleUpdateProfile}>
           <FontAwesomeIcon icon={faSave} />
           Lưu lại
         </Button>

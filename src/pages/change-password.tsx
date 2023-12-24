@@ -92,7 +92,7 @@ export default function ChangePassword() {
                   />
                 </div>
                 <div>
-                  <Button loading={updatePasswordMutation.isPending} className='mt-3 w-full'>
+                  <Button loading={updatePasswordMutation.isPending} color='primary' className='mt-3 w-full'>
                     Lưu lại
                   </Button>
                 </div>

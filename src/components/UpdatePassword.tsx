@@ -81,7 +81,7 @@ const UpdatePassword = forwardRef<HTMLDialogElement>(({}, ref) => {
             />
             {errors.newPassword?.message && <div className='ml-4 mt-2 text-error'>{errors.newPassword?.message}</div>}
           </div>
-          <Button className='w-full' loading={useUpdatePassword.isPending}>
+          <Button className='w-full' loading={useUpdatePassword.isPending} color='primary'>
             Lưu lại
           </Button>
         </form>

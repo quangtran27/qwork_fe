@@ -109,7 +109,7 @@ export default function Account() {
                   />
                 </div>
                 <div>
-                  <Button loading={updateUserInfoMutation.isPending} className='mt-3 w-full'>
+                  <Button loading={updateUserInfoMutation.isPending} className='mt-3 w-full' color='primary'>
                     <FontAwesomeIcon icon={faSave} />
                     Lưu lại
                   </Button>

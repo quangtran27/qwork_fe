@@ -125,7 +125,7 @@ export default function UpdateRecruiterProfile({ ...props }: Props) {
         <TextEditor editorState={editorState} setEditorState={setEditorState} />
       </div>
       <div className='flex flex-col'>
-        <Button loading={useUpdateProfile.isPending} onClick={handleUpdateProfile}>
+        <Button loading={useUpdateProfile.isPending} color='primary' onClick={handleUpdateProfile}>
           Lưu lại
         </Button>
       </div>

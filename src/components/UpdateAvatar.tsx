@@ -80,6 +80,7 @@ const UpdateAvatar = forwardRef<HTMLDialogElement>(({}, ref) => {
           </Button>
           <Button
             className='min-w-[200px]'
+            color='primary'
             loading={updateAvatarMutation.isPending}
             onClick={() => {
               image && updateAvatarMutation.mutate({ id: profile.id, image: image })

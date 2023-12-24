@@ -74,6 +74,7 @@ const UpdateBackground = forwardRef<HTMLDialogElement>(({}, ref) => {
             </Button>
             <Button
               className='min-w-[200px]'
+              color='primary'
               loading={udpateBackgroundMutation.isPending}
               onClick={() => {
                 image && udpateBackgroundMutation.mutate({ id: profile.id, image: image })
