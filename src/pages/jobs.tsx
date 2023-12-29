@@ -54,7 +54,7 @@ export default function Jobs() {
       <Container>
         <div className='w-full'>
           <div className='mt-8 px-4 lg:px-0'>
-            <div className='flex items-center justify-between'>
+            <div className='flex flex-col items-center justify-between gap-2 md:flex-row'>
               <div className='flex items-center gap-3'>
                 <FontAwesomeIcon icon={faBriefcase} className='text-xl text-secondary' />
                 <h3 className='text-h3'>Tất cả công việc</h3>

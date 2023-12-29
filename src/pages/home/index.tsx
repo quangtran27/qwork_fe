@@ -1,7 +1,7 @@
 import { useAppSelector } from '@/hook/useAppSelector'
 import { selectAuth } from '@/redux/reducers/auth-slice'
 import { UserRoles } from '@/types/users.type'
-import CandidateHome from './candidate-home'
+import CommonHome from './home'
 import RecruiterHome from './recruiter-home'
 import { useEffect } from 'react'
 
@@ -11,5 +11,5 @@ export default function Home() {
   }, [])
 
   const auth = useAppSelector(selectAuth)
-  return auth.user.role === UserRoles.recruiter ? <RecruiterHome /> : <CandidateHome />
+  return auth.user.role === UserRoles.recruiter ? <RecruiterHome /> : <CommonHome />
 }

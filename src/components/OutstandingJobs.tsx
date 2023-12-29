@@ -15,7 +15,7 @@ export default function OutstandingJobs() {
 
   return (
     <div className='mx-auto max-w-screen-xl'>
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col items-center justify-between gap-2 md:flex-row'>
         <div className='flex items-center gap-3'>
           <FontAwesomeIcon icon={faFire} bounce className='text-xl text-secondary' />
           <h3 className='text-h3'>Việc làm hot</h3>
@@ -27,7 +27,7 @@ export default function OutstandingJobs() {
       {isLoading ? (
         <Loading content='Đang tải danh sách việc làm nổi bật' />
       ) : data?.data.length ? (
-        <div className='grid grid-cols-1 gap-4 py-4 md:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3'>
           {data.data.map((job) => (
             <Job key={job.id} {...job} onEdit={() => {}} onDelete={() => {}} />
           ))}

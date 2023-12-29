@@ -94,8 +94,8 @@ export default function RecruiterJobs() {
   }
 
   return (
-    <div className='grid grid-cols-5  gap-4 py-4'>
-      <div className='col-span-2'>
+    <div className='mx-4 grid grid-cols-1 gap-4 py-4 lg:mx-0 lg:grid-cols-5'>
+      <div className='lg:col-span-2'>
         <Card>
           <h3 className='text-h3 mb-3 text-center lg:text-left'>Giới thiệu</h3>
           <div className='text-justify text-lg lg:text-base'>
@@ -112,7 +112,7 @@ export default function RecruiterJobs() {
           </div>
         </Card>
       </div>
-      <div className='col-span-3 flex flex-col gap-4'>
+      <div className='flex flex-col gap-4 lg:col-span-3'>
         <Card>
           <h3 className='text-h3 mb-3 text-center lg:text-left'>Thông tin tuyển dụng</h3>
           <div className='flex flex-col gap-4 lg:flex-row'>

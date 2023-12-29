@@ -15,7 +15,7 @@ export default function OutstandingRecruiters() {
 
   return (
     <div className='mx-auto max-w-screen-xl'>
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col items-center justify-between gap-2 md:flex-row'>
         <div className='flex items-center gap-3 text-2xl'>
           <FontAwesomeIcon icon={faBuilding} shake className='text-primary' />
           <h3 className='text-h3'>Nhà tuyển dụng nổi bật</h3>
@@ -27,7 +27,7 @@ export default function OutstandingRecruiters() {
       {isLoading ? (
         <Loading content='Đang tải danh sách nhà tuyển dụng nổi bật' />
       ) : data?.data.length ? (
-        <div className='grid grid-cols-1 gap-4 py-4 md:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3'>
           {data?.data.map((recruiter) => <Recruiter key={recruiter.id} {...recruiter} />)}
         </div>
       ) : (

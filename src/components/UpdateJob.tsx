@@ -161,7 +161,7 @@ const UpdateJob = forwardRef<HTMLDialogElement, UpdateJobProps>(
               {errors.cityCode?.message && <div className='text-error'>{errors.cityCode?.message}</div>}
               <TextEditor editorState={editorState} setEditorState={setEditorState} />
             </div>
-            <Button loading={updateJobMutation.isPending} onClick={handlePostJob}>
+            <Button color='primary' loading={updateJobMutation.isPending} onClick={handlePostJob}>
               {mode === 'create' ? 'Đăng tin' : 'Cập nhật'}
             </Button>
           </form>

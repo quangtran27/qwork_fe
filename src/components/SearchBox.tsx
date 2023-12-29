@@ -66,14 +66,14 @@ export default function SearchBox({
 
   return (
     <section className='flex justify-center bg-gradient-to-br from-blue-300 to-pink-200 py-12'>
-      <div className='max-w-screen-lg rounded-2xl border bg-white p-4 shadow-sm lg:px-8 lg:py-6'>
+      <div className='mx-4 w-full max-w-screen-lg rounded-2xl border bg-white p-4 shadow-sm md:mx-4 lg:px-8 lg:py-6'>
         <h1 className='text-center text-xl font-semibold'>{title}</h1>
         <div className='my-4'>{body}</div>
         <div className='flex w-full flex-col gap-4 md:flex-row'>
           <div className='relative flex-1'>
             <TextInput
               autoComplete='off'
-              className='min-w-[428px] max-w-full'
+              className='max-w-full lg:min-w-[428px]'
               insideClass='bg-gray-100'
               iconLeft={<FontAwesomeIcon className='text-gray-500' icon={faMagnifyingGlass} />}
               name='job-search'

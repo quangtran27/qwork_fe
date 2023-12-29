@@ -53,7 +53,7 @@ export default function ResetPassword() {
 
   return (
     <main className='relative z-20 flex h-screen min-h-screen w-screen select-none items-center justify-center bg-login text-sm'>
-      <div className='w-full max-w-xl'>
+      <div className='mx-4 w-full max-w-xl'>
         <Card>
           <div className='space-y-3'>
             <Link to={routes.home} className='mb-6 flex w-full justify-center'>

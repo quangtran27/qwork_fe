@@ -51,7 +51,7 @@ export default function Header() {
               </label>
             </div>
             {auth.user.id ? (
-              <div className='dropdown-end dropdown hidden lg:block'>
+              <div className='dropdown dropdown-end hidden lg:block'>
                 <label tabIndex={0} className='btn btn-ghost flex flex-nowrap rounded-full font-bold'>
                   <span className='whitespace-nowrap'>{auth.user.name}</span>
                   <FontAwesomeIcon icon={faChevronDown} />
@@ -113,17 +113,21 @@ export default function Header() {
               {item.label}
             </NavLink>
           ))}
-          {auth.user.id ? (
+          <div className='divider my-0 pl-20'></div>
+          {auth.token ? (
             <>
-              <NavLink
-                to={routes.profile.replace(':id', auth.user.id)}
-                className={({ isActive }) =>
-                  'link-underline text-right text-lg font-semibold' + (isActive ? ' active' : '')
-                }
-              >
-                Trang cá nhân
-              </NavLink>
-              <div onClick={handleLogout} className='link-underline text-right text-lg font-semibold'>
+              {(auth.user.role === UserRoles.candidate ? candidateProfileTabs : recruiterProfileTabs).map(
+                (tab, index) => (
+                  <Link
+                    key={index}
+                    className='link-underline text-right text-lg font-semibold'
+                    to={routes.profile.replace(':id', auth.user.id) + `?tab=${tab.value}`}
+                  >
+                    {tab.label}
+                  </Link>
+                ),
+              )}
+              <div onClick={handleLogout} className='link-underline text-right text-lg font-semibold text-error'>
                 Đăng xuất
               </div>
             </>

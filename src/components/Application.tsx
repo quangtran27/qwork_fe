@@ -84,7 +84,7 @@ export default function Application({ ...props }: ApplicationProps) {
       ) : (
         <Card>
           <div className='flex gap-5'>
-            <Link to={routes.jobDetail.replace(':id', props.jobId)}>
+            <Link className='md:div hidden' to={routes.jobDetail.replace(':id', props.jobId)}>
               <figure className='relative h-12 w-12 overflow-hidden rounded-full border'>
                 <img
                   className='absolute h-full w-full object-cover'
@@ -113,7 +113,10 @@ export default function Application({ ...props }: ApplicationProps) {
               </Link>
               <div className='flex items-center justify-between'>
                 <div>Ứng tuyển vào: {props.created}</div>
-                <button className='link-hover link-primary cursor-pointer' onClick={handleReviewApplication}>
+                <button
+                  className='link-hover link-primary cursor-pointer whitespace-nowrap'
+                  onClick={handleReviewApplication}
+                >
                   Chi tiết {'>'}
                 </button>
               </div>
@@ -122,7 +125,10 @@ export default function Application({ ...props }: ApplicationProps) {
                 <div>
                   Trạng thái: <span className={`${statusClass} p-3`}>{statusContent}</span>
                 </div>
-                <div>Cập nhật: {props.updated}</div>
+                <div className='flex flex-col md:flex-row'>
+                  <span>Cập nhật:</span>
+                  <span> {props.updated}</span>
+                </div>
               </div>
             </div>
           </div>
