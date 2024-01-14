@@ -68,6 +68,11 @@ export default function UpdateRecruiterProfile({ ...props }: Props) {
   })
 
   useEffect(() => {
+    setValue('name', profile.name)
+    setValue('phone', profile.phone)
+    setValue('address', profile.address)
+    setValue('email', profile.email)
+
     try {
       setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(profile.description))))
     } catch {}

@@ -9,8 +9,12 @@ import axios, { axiosPrivate } from './axios-instance'
 const userApi = {
   createUser: async (user: User) => (await axios.post<ApiResponse<User>>('users/', user)).data,
   getProfile: async (userId: string) => (await axiosPrivate.get<ApiResponse<Profile>>(`users/${userId}/profile`)).data,
-  getApplications: async (userId: string) =>
-    (await axiosPrivate.get<ApiResponse<ApplicationDetail[]>>(`users/${userId}/applications`)).data,
+  getApplications: async (userId: string, options?: object) =>
+    (
+      await axiosPrivate.get<ApiResponse<ApplicationDetail[]>>(`users/${userId}/applications`, {
+        params: options,
+      })
+    ).data,
   getSavedJobs: async (userId: string) =>
     (await axiosPrivate.get<ApiResponse<Job[]>>(`users/${userId}/saved-jobs`)).data,
   getCVs: async (userId: string) => (await axiosPrivate.get<ApiResponse<string[]>>(`users/${userId}/cvs`)).data,

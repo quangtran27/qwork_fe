@@ -25,8 +25,8 @@ export default function CandidateApplications() {
   const status = Number.parseInt(searchParams.get('status') || '0') || statusOptions[0].value
 
   const { data, isLoading } = useQuery({
-    queryKey: ['user-applications', auth.user.id],
-    queryFn: () => userApi.getApplications(auth.user.id),
+    queryKey: ['user-applications', auth.user.id, status],
+    queryFn: () => userApi.getApplications(auth.user.id, { status }),
     enabled: !!auth.user.id,
   })
 

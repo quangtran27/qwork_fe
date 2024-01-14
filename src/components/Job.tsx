@@ -125,7 +125,7 @@ export default function Job({
               <div className='divider'></div>
               <div className='flex flex-col gap-4'>
                 {!applications?.length && (
-                  <div className='text-center text-gray-400'>Chưa có đơn úng tuyển nào cho công việc này!</div>
+                  <div className='text-center text-gray-400'>Chưa có đơn ứng tuyển nào cho công việc này!</div>
                 )}
                 {applications?.map((application) => <Application key={application.id} {...application} />)}
               </div>

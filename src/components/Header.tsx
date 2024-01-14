@@ -127,6 +127,9 @@ export default function Header() {
                   </Link>
                 ),
               )}
+              <Link className='link-underline text-right text-lg font-semibold' to={routes.account}>
+                Cài đặt tài khoản
+              </Link>
               <div onClick={handleLogout} className='link-underline text-right text-lg font-semibold text-error'>
                 Đăng xuất
               </div>

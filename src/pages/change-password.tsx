@@ -50,7 +50,7 @@ export default function ChangePassword() {
 
   return (
     <div className='mx-auto w-full max-w-screen-xl'>
-      <div className='grid grid-cols-3 gap-4 py-4'>
+      <div className='mx-4 grid gap-4 py-4 md:mx-0 md:grid-cols-3'>
         <div className='col-span-3 lg:col-span-1'>
           <AccountSettingMenu />{' '}
         </div>

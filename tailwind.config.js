@@ -6,6 +6,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      aspectRatio: {
+        background: '7 / 1',
+      },
       backgroundImage: {
         company: 'url("/images/background_company.jpg")',
         login: 'url("/images/login-background.jpg")',

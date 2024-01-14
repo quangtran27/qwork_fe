@@ -31,7 +31,7 @@ export default function Jobs() {
   })
 
   useEffect(() => {
-    document.title = 'QWork - Tẩt cả việc làm'
+    document.title = 'QWork - Tất cả việc làm'
 
     isFetched && refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps

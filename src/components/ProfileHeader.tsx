@@ -25,7 +25,7 @@ export default function ProfileHeader() {
   return (
     <>
       <div
-        className='relative h-48 bg-cover bg-no-repeat lg:h-80'
+        className='aspect-background relative bg-cover bg-no-repeat'
         style={{
           backgroundImage: `url('${profile.background ? profile.background : '/images/login-background.jpg'}')`,
         }}
