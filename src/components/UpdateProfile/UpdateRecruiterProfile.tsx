@@ -75,7 +75,9 @@ export default function UpdateRecruiterProfile({ ...props }: Props) {
 
     try {
       setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(profile.description))))
-    } catch {}
+    } catch {
+      setEditorState(EditorState.createEmpty())
+    }
   }, [profile.address, profile.description, profile.email, profile.name, profile.phone, setValue])
 
   return (

@@ -79,8 +79,11 @@ export default function UpdateCandidateProfile({ ...props }: UpdateCandidateProf
 
   useEffect(() => {
     try {
-      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(profile.description))))
-    } catch {}
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(profile.description || ''))))
+      console.log('set oke')
+    } catch {
+      setEditorState(EditorState.createEmpty())
+    }
   }, [profile.description])
 
   return (
